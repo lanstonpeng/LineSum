@@ -55,6 +55,7 @@
     UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
     [panGesture setMaximumNumberOfTouches:1];
     [self.view addGestureRecognizer:panGesture];
+    [self lineUpSolutionPath:self.sequence];
 }
 - (void)handleTap:sender
 {
@@ -92,12 +93,6 @@
     numLabel.text = [NSString stringWithFormat:@"%d",[num intValue]];
     [numLabel setTag:LUCKY_NUM];
     [cubeView addSubview:numLabel];
-    /*
-    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
-    [cubeView addGestureRecognizer:tapGesture];
-    UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
-    [cubeView addGestureRecognizer:panGesture];
-     */
     return cubeView;
 }
 - (void)generateGrid:(NSArray*)sequence{
@@ -107,6 +102,91 @@
         [cubeView setTag:i+1];
         [self.view addSubview:cubeView];
     }
+}
+- (void)placeAValideCubeView:(int)x y:(int)y withSequenceIdx:(NSUInteger)index
+{
+    int idx = [self getIndex:x y:y];
+    UIView* currentView =[self.view viewWithTag:idx];
+    UILabel* numLabel = (UILabel*)[currentView viewWithTag:LUCKY_NUM];
+    NSNumber* number = self.sequence[index];
+    numLabel.text = [ NSString stringWithFormat:@"%d", [number intValue] ];
+    [currentView setBackgroundColor:[UIColor redColor]];
+}
+- (void)lineUpSolutionPath:(NSArray*)sequence
+{
+    int x = arc4random() % 4;
+    int y = arc4random() % 4;
+    BOOL hasChanged = NO;
+    [self placeAValideCubeView:x y:y withSequenceIdx:0];
+    for(int i = 0;i < [sequence count] - 1;i++){
+        hasChanged = NO;
+        int direction = arc4random() % 4;
+        switch (direction) {
+            //UP
+            case 0:{
+                y--;
+                hasChanged = YES;
+                if(![self isValidCoordinate:x y:y])
+                {
+                    y++;
+                    i--;
+                    hasChanged = NO;
+                }
+                break;
+            }
+            //DOWN
+            case 1:{
+                y++;
+                hasChanged = YES;
+                if(![self isValidCoordinate:x y:y])
+                {
+                    y--;
+                    i--;
+                    hasChanged = NO;
+                }
+                break;
+            }
+            //RIGHT
+            case 2:{
+                x++;
+                hasChanged = YES;
+                if(![self isValidCoordinate:x y:y])
+                {
+                    x--;
+                    i--;
+                    hasChanged = NO;
+                }
+                break;
+            }
+            //LEFT
+            case 3:{
+                x--;
+                hasChanged = YES;
+                if(![self isValidCoordinate:x y:y])
+                {
+                    x++;
+                    i--;
+                    hasChanged = NO;
+                }
+                break;
+            }
+            default:
+                break;
+        }
+        if(hasChanged){
+            [self placeAValideCubeView:x y:y withSequenceIdx:i+1];
+        }
+    }
+}
+- (int)getIndex:(int)x y:(int)y
+{
+    return x + y * 4 + 1;
+}
+- (BOOL)isValidCoordinate:(int)x y:(int)y
+{
+    int boundaryX = 3;
+    int boundaryY = 3;
+    return (x >= 0 && y>=0 && x<= boundaryX && y<=boundaryY);
 }
 - (void)didReceiveMemoryWarning
 {
