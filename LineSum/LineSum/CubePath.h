@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CubeEntity.h"
 
 @interface CubePath : NSObject
-@property (strong,nonatomic)NSDictionary* lastObject;
 
--(void)addCubeView:(UIView*)cubeView x:(int)x y:(int)y;
+-(void)addCubeEntity:(CubeEntity*)cubeEntity;
 -(void)removeLastCubeView;
+-(BOOL)containCubePath:(CubeEntity*)cubeEntity;
+-(BOOL)isEqualToLastObject:(CubeEntity*)cubeEntity;
+-(void)revertPathAfterCubeView:(CubeEntity*)cubeEntity executeBlokOnRevertedItem:(void (^)(CubeEntity* cubeEntity))executeBlock;
 @end

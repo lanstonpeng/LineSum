@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Util.h"
+#import "CubePath.h"
 @interface ViewController : UIViewController
 
 @end

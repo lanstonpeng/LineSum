@@ -19,12 +19,45 @@
     }
     return _cubePathArray;
 }
--(void)addCubeView:(UIView*)cubeView x:(int)x y:(int)y{
-    NSMutableDictionary* dic = [[NSMutableDictionary alloc]init];
-    [dic setObject:cubeView forKey:@"cubeview"];
-    [dic setObject:[NSNumber numberWithInt:x] forKey:@"pointX"];
-    [dic setObject:[NSNumber numberWithInt:y] forKey:@"pointY"];
-    [self.cubePathArray addObject:dic];
+-(void)addCubeEntity:(CubeEntity*)cubeEntity{
+    NSLog(@"adding");
+    [self.cubePathArray addObject:cubeEntity];
+}
+-(BOOL)containCubePath:(CubeEntity*)cubeEntity{
+    for(int i = 0;i<[self.cubePathArray count];i++){
+        if([self isEqualCubeView:self.cubePathArray[i] anotherEntity:cubeEntity]){
+            return YES;
+        }
+    }
+    return NO;
+}
+-(BOOL)isEqualToLastObject:(CubeEntity*)cubeEntity{
+    
+    if ([_cubePathArray count]>0) {
+        CubeEntity* lastObject = [self.cubePathArray lastObject];
+        return [self isEqualCubeView:lastObject anotherEntity:cubeEntity];
+    }
+    return NO;
+}
+-(void)revertPathAfterCubeView:(CubeEntity*)cubeEntity executeBlokOnRevertedItem:(void (^)(CubeEntity* cubeEntity))executeBlock{
+    NSUInteger idx = [self getCubeEntityIdx:cubeEntity];
+    for(;idx < [self.cubePathArray count];idx++){
+        CubeEntity* lastObject = [self.cubePathArray lastObject];
+        executeBlock(lastObject);
+        [self.cubePathArray removeLastObject];
+    }
+}
+-(BOOL)isEqualCubeView:(CubeEntity*)cubeEntity1 anotherEntity:(CubeEntity*)cubeEntity2{
+    return cubeEntity1.cubeView == cubeEntity2.cubeView && cubeEntity1.x == cubeEntity2.x && cubeEntity2.y == cubeEntity2.y;
+}
+-(NSUInteger)getCubeEntityIdx:(CubeEntity*)cuebEntity{
+    for(int i = 0 ;i<[self.cubePathArray count];i++){
+        if( [self isEqualCubeView:self.cubePathArray[i] anotherEntity:cuebEntity])
+        {
+            return i;
+        }
+    }
+    return NSIntegerMax;
 }
 -(void)removeLastCubeView{
     if([_cubePathArray count] > 0){

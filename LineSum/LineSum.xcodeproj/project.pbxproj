@@ -26,6 +26,7 @@
 		9D103EA618FFEF7F00BF200A /* UIDevice+screenType.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D103EA418FFEF7F00BF200A /* UIDevice+screenType.m */; };
 		9D11E61D1900C51A002D6B2C /* ScoreBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D11E61C1900C51A002D6B2C /* ScoreBoardView.m */; };
 		9D11E6201900F9F3002D6B2C /* CubePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D11E61F1900F9F3002D6B2C /* CubePath.m */; };
+		9D11E6D2190157AB002D6B2C /* CubeEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D11E6D1190157AB002D6B2C /* CubeEntity.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,8 @@
 		9D11E61C1900C51A002D6B2C /* ScoreBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreBoardView.m; sourceTree = "<group>"; };
 		9D11E61E1900F9F3002D6B2C /* CubePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubePath.h; sourceTree = "<group>"; };
 		9D11E61F1900F9F3002D6B2C /* CubePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CubePath.m; sourceTree = "<group>"; };
+		9D11E6D0190157AB002D6B2C /* CubeEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeEntity.h; sourceTree = "<group>"; };
+		9D11E6D1190157AB002D6B2C /* CubeEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CubeEntity.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				9D103EA718FFEF8B00BF200A /* Util */,
+				9D11E6D3190157B0002D6B2C /* Model */,
 				9D11E6211900FA84002D6B2C /* DataStructure */,
 				9D103E3D18FFE51000BF200A /* AppDelegate.h */,
 				9D103E3E18FFE51000BF200A /* AppDelegate.m */,
@@ -191,6 +195,15 @@
 				9D11E61F1900F9F3002D6B2C /* CubePath.m */,
 			);
 			name = DataStructure;
+			sourceTree = "<group>";
+		};
+		9D11E6D3190157B0002D6B2C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9D11E6D0190157AB002D6B2C /* CubeEntity.h */,
+				9D11E6D1190157AB002D6B2C /* CubeEntity.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,6 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D103E4518FFE51000BF200A /* ViewController.m in Sources */,
+				9D11E6D2190157AB002D6B2C /* CubeEntity.m in Sources */,
 				9D11E6201900F9F3002D6B2C /* CubePath.m in Sources */,
 				9D103E3F18FFE51000BF200A /* AppDelegate.m in Sources */,
 				9D11E61D1900C51A002D6B2C /* ScoreBoardView.m in Sources */,

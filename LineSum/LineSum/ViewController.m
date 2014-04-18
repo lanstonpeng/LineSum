@@ -17,6 +17,7 @@
 @property (strong,nonatomic)NSMutableArray* occupiedArray;
 @property (strong,nonatomic)NSMutableArray* occupiedCubeViewArray;
 @property (strong,nonatomic)UIView* containerView;
+@property (strong,nonatomic)CubePath* cubePath;
 @end
 
 
@@ -46,6 +47,12 @@
         _occupiedCubeViewArray = [[NSMutableArray alloc]init];
     }
     return _occupiedCubeViewArray;
+}
+-(CubePath*)cubePath{
+    if(!_cubePath){
+        _cubePath = [[CubePath alloc]init];
+    }
+    return _cubePath;
 }
 - (void)viewDidLoad
 {
@@ -79,8 +86,35 @@
     int y = pointerY / (GRID_HEIGHT * CUBE_WIDTH) * GRID_HEIGHT;
     
     int idx =(x+ 4 * y + 1);
+    UIView* currentView =[self.view viewWithTag:idx];
+    UILabel* numLabel = (UILabel*)[currentView viewWithTag:LUCKY_NUM];
+    int num = [numLabel.text intValue];
+    __weak typeof(self) weakSelf = self;
+    CubeEntity* cubeEntity = [[CubeEntity alloc]initWithView:currentView x:x y:y];
     
+    //Things to Do
+    //record the cube path so that we can change the status while users moving back
+    //while it move inside the cube ,prevent it from running the logic again
+    //the first time moving into the current view
+    if(![self.cubePath isEqualToLastObject:cubeEntity]){
+        //NSLog(@"not equal the last object");
+        if(![self.cubePath containCubePath:cubeEntity]){
+            //NSLog(@"not containing the cubeEntity");
+            [cubeEntity.cubeView setBackgroundColor:[UIColor whiteColor]];
+            self.currentSum.text = [NSString stringWithFormat:@"%d",[self.currentSum.text intValue] + num];
+            [self.cubePath addCubeEntity:cubeEntity];
+        }
+        //if the view is already in the path,we revert the path
+        else{
+            NSLog(@"prepare reverting ");
+           [_cubePath revertPathAfterCubeView:cubeEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity) {
+               [cubeEntity.cubeView setBackgroundColor:[Util randomColor]];
+                weakSelf.currentSum.text = [NSString stringWithFormat:@"%d",[self.currentSum.text intValue] - num];
+           }];
+        }
+    }
     //if(![self.usedIndexArray containsObject:[NSNumber numberWithInt:idx ]]){
+    /*
     if(![[self.usedIndexArray lastObject] isEqualToValue:[NSNumber numberWithInt:idx ]]){
         [self.usedIndexArray addObject:[NSNumber numberWithInt:idx ]];
         UIView* currentView =[self.view viewWithTag:idx];
@@ -105,6 +139,7 @@
         }
         
     }
+    */
     if(sender.state == UIGestureRecognizerStateEnded){
         NSLog(@"Pan End");
     }
