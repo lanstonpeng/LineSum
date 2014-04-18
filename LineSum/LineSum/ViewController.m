@@ -15,16 +15,18 @@
 @property (strong,nonatomic)UILabel* currentSum;
 @property (strong,nonatomic)NSMutableArray* usedIndexArray;
 @property (strong,nonatomic)NSMutableArray* occupiedArray;
+@property (strong,nonatomic)NSMutableArray* occupiedCubeViewArray;
+@property (strong,nonatomic)UIView* containerView;
 @end
 
 
 #define GRID_WIDTH 4
-#define GRID_HEIGHT 5
+#define GRID_HEIGHT 4
 #define UP_PADDING 100
 #define CUBE_WIDTH 80
 #define CUBE_LINE_COUNT 4
 #define LUCKY_NUM 806
-#define CUBE_COUNT 4
+#define CUBE_COUNT 3
 @implementation ViewController
 
 - (NSMutableArray *)usedIndexArray{
@@ -39,6 +41,12 @@
     }
     return _occupiedArray;
 }
+- (NSMutableArray *)occupiedCubeViewArray{
+    if(!_occupiedCubeViewArray){
+        _occupiedCubeViewArray = [[NSMutableArray alloc]init];
+    }
+    return _occupiedCubeViewArray;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -49,14 +57,9 @@
     UILabel* sumLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 50, 120, 40)];
     sumLabel.text = [[dic objectForKey:@"sum"] stringValue];
     self.currentSum = [[UILabel alloc]initWithFrame:CGRectMake(150, 50, 50, 40 )];
+    self.containerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, IPHONE_SCREEN_WIDTH, IPHONE_SCREEN_HEIGHT)];
     [self.currentSum setBackgroundColor:[Util randomColor]];
     self.currentSum.text = @"0";
-    /*
-    for(;i< [self.sequence count]; i++){
-        UIView* cubeView =[self generateCube:CGRectMake( i * 80 % 320, UP_PADDING + (i / 4 ) * 80, 80, 80) withNum:self.sequence[i]];
-        [self.view addSubview:cubeView];
-    }
-     */
     [self generateGrid:self.sequence];
     [self.view addSubview:sumLabel];
     [self.view addSubview:self.currentSum];
@@ -64,10 +67,6 @@
     [panGesture setMaximumNumberOfTouches:1];
     [self.view addGestureRecognizer:panGesture];
     [self lineUpSolutionPath:self.sequence];
-}
-- (void)handleTap:sender
-{
-    NSLog(@"start taping");
 }
 -(void)handlePan:(UIPanGestureRecognizer *)sender
 {
@@ -81,15 +80,33 @@
     
     int idx =(x+ 4 * y + 1);
     
-    if(![self.usedIndexArray containsObject:[NSNumber numberWithInt:idx ]]){
+    //if(![self.usedIndexArray containsObject:[NSNumber numberWithInt:idx ]]){
+    if(![[self.usedIndexArray lastObject] isEqualToValue:[NSNumber numberWithInt:idx ]]){
         [self.usedIndexArray addObject:[NSNumber numberWithInt:idx ]];
         UIView* currentView =[self.view viewWithTag:idx];
         UILabel* numLabel = (UILabel*)[currentView viewWithTag:LUCKY_NUM];
         int num = [numLabel.text intValue];
-    //    NSLog(@"%d %d",x,y);
-    //    NSLog(@"paning on %@", [self.view viewWithTag:(x+ 4 * y + 1)]);
-        [currentView setBackgroundColor:[UIColor whiteColor]];
-        self.currentSum.text = [NSString stringWithFormat:@"%d",[self.currentSum.text intValue] + num];
+        
+        if([self.occupiedCubeViewArray containsObject:currentView]){
+            NSUInteger currentIdx = [self.occupiedCubeViewArray indexOfObject:currentView];
+            for(;currentIdx < [self.occupiedCubeViewArray count];currentIdx++){
+                [self.occupiedCubeViewArray.lastObject setBackgroundColor:[Util randomColor]];
+                [self.occupiedCubeViewArray removeLastObject];
+                [self.usedIndexArray removeLastObject];
+                self.currentSum.text = [NSString stringWithFormat:@"%d",[self.currentSum.text intValue] - num];
+            }
+        }
+        else{
+            [self.occupiedCubeViewArray addObject:currentView];
+            //    NSLog(@"%d %d",x,y);
+            //    NSLog(@"paning on %@", [self.view viewWithTag:(x+ 4 * y + 1)]);
+            [currentView setBackgroundColor:[UIColor whiteColor]];
+            self.currentSum.text = [NSString stringWithFormat:@"%d",[self.currentSum.text intValue] + num];
+        }
+        
+    }
+    if(sender.state == UIGestureRecognizerStateEnded){
+        NSLog(@"Pan End");
     }
     
 }
@@ -131,7 +148,7 @@
     for(int i = 0;i < [sequence count];i++){
         hasChanged = NO;
         int directionIdx = arc4random() % [avaiable count];
-        NSLog(@"choosing direction %@",avaiable[directionIdx]);
+//        NSLog(@"choosing direction %@",avaiable[directionIdx]);
         switch ([avaiable[directionIdx]intValue]) {
             //UP
             case 0:{
@@ -185,15 +202,15 @@
                 break;
         }
         if(hasChanged){
-            NSLog(@"deprecated :%@",deprecated);
+//            NSLog(@"deprecated :%@",deprecated);
             if([deprecated intValue] > -1){
                 [avaiable addObject:deprecated];
             }
             deprecated = avaiable[directionIdx];
             [avaiable removeObject:avaiable[directionIdx]];
-            NSLog(@"After removing %@",avaiable );
-            NSLog(@"placing the value: %@",self.sequence[i]);
-            NSLog(@"===========");
+//            NSLog(@"After removing %@",avaiable );
+//            NSLog(@"placing the value: %@",self.sequence[i]);
+//            NSLog(@"===========");
             [self.occupiedArray addObject:@[[NSNumber numberWithInt:x],[NSNumber numberWithInt:y]]];
             [self placeAValideCubeView:x y:y withSequenceIdx:i];
         }
@@ -220,10 +237,9 @@
     }
     return NO;
 }
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    NSLog(@"touch end");
 }
-
+-(void)restartGame
+{}
 @end

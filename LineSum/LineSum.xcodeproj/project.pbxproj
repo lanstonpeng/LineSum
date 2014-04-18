@@ -24,6 +24,8 @@
 		9D103E6518FFE53E00BF200A /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D103E6418FFE53E00BF200A /* Util.m */; };
 		9D103EA518FFEF7F00BF200A /* DeviceInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9D103EA218FFEF7F00BF200A /* DeviceInfo.mm */; };
 		9D103EA618FFEF7F00BF200A /* UIDevice+screenType.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D103EA418FFEF7F00BF200A /* UIDevice+screenType.m */; };
+		9D11E61D1900C51A002D6B2C /* ScoreBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D11E61C1900C51A002D6B2C /* ScoreBoardView.m */; };
+		9D11E6201900F9F3002D6B2C /* CubePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D11E61F1900F9F3002D6B2C /* CubePath.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,10 @@
 		9D103EA218FFEF7F00BF200A /* DeviceInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeviceInfo.mm; sourceTree = "<group>"; };
 		9D103EA318FFEF7F00BF200A /* UIDevice+screenType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+screenType.h"; sourceTree = "<group>"; };
 		9D103EA418FFEF7F00BF200A /* UIDevice+screenType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+screenType.m"; sourceTree = "<group>"; };
+		9D11E61B1900C51A002D6B2C /* ScoreBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreBoardView.h; sourceTree = "<group>"; };
+		9D11E61C1900C51A002D6B2C /* ScoreBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreBoardView.m; sourceTree = "<group>"; };
+		9D11E61E1900F9F3002D6B2C /* CubePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubePath.h; sourceTree = "<group>"; };
+		9D11E61F1900F9F3002D6B2C /* CubePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CubePath.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,11 +128,14 @@
 			isa = PBXGroup;
 			children = (
 				9D103EA718FFEF8B00BF200A /* Util */,
+				9D11E6211900FA84002D6B2C /* DataStructure */,
 				9D103E3D18FFE51000BF200A /* AppDelegate.h */,
 				9D103E3E18FFE51000BF200A /* AppDelegate.m */,
 				9D103E4018FFE51000BF200A /* Main.storyboard */,
 				9D103E4318FFE51000BF200A /* ViewController.h */,
 				9D103E4418FFE51000BF200A /* ViewController.m */,
+				9D11E61B1900C51A002D6B2C /* ScoreBoardView.h */,
+				9D11E61C1900C51A002D6B2C /* ScoreBoardView.m */,
 				9D103E4618FFE51000BF200A /* Images.xcassets */,
 				9D103E3518FFE51000BF200A /* Supporting Files */,
 			);
@@ -173,6 +182,15 @@
 				9D103E6418FFE53E00BF200A /* Util.m */,
 			);
 			name = Util;
+			sourceTree = "<group>";
+		};
+		9D11E6211900FA84002D6B2C /* DataStructure */ = {
+			isa = PBXGroup;
+			children = (
+				9D11E61E1900F9F3002D6B2C /* CubePath.h */,
+				9D11E61F1900F9F3002D6B2C /* CubePath.m */,
+			);
+			name = DataStructure;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -276,7 +294,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D103E4518FFE51000BF200A /* ViewController.m in Sources */,
+				9D11E6201900F9F3002D6B2C /* CubePath.m in Sources */,
 				9D103E3F18FFE51000BF200A /* AppDelegate.m in Sources */,
+				9D11E61D1900C51A002D6B2C /* ScoreBoardView.m in Sources */,
 				9D103E3B18FFE51000BF200A /* main.m in Sources */,
 				9D103E6518FFE53E00BF200A /* Util.m in Sources */,
 				9D103EA518FFEF7F00BF200A /* DeviceInfo.mm in Sources */,
