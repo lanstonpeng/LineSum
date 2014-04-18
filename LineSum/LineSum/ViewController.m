@@ -14,6 +14,7 @@
 @property (strong,nonatomic)NSMutableArray* cubeViews;
 @property (strong,nonatomic)UILabel* currentSum;
 @property (strong,nonatomic)NSMutableArray* usedIndexArray;
+@property (strong,nonatomic)NSMutableArray* occupiedArray;
 @end
 
 
@@ -23,6 +24,7 @@
 #define CUBE_WIDTH 80
 #define CUBE_LINE_COUNT 4
 #define LUCKY_NUM 806
+#define CUBE_COUNT 4
 @implementation ViewController
 
 - (NSMutableArray *)usedIndexArray{
@@ -31,11 +33,17 @@
     }
     return  _usedIndexArray;
 }
+- (NSMutableArray *)occupiedArray{
+    if(!_occupiedArray){
+        _occupiedArray = [[NSMutableArray alloc]init];
+    }
+    return _occupiedArray;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    NSDictionary* dic = [Util generateNumbers:4];
+    NSDictionary* dic = [Util generateNumbers:CUBE_COUNT];
     self.sequence = [dic objectForKey:@"sequence"];
     self.sum = (NSUInteger)[dic objectForKey:@"sum"];
     UILabel* sumLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 50, 120, 40)];
@@ -117,11 +125,14 @@
     int x = arc4random() % 4;
     int y = arc4random() % 4;
     BOOL hasChanged = NO;
-    [self placeAValideCubeView:x y:y withSequenceIdx:0];
-    for(int i = 0;i < [sequence count] - 1;i++){
+    NSMutableArray* avaiable = [[NSMutableArray alloc]initWithArray:@[@0,@1,@2,@3]];
+    NSNumber* deprecated = @-1;
+    //[self placeAValideCubeView:x y:y withSequenceIdx:0];
+    for(int i = 0;i < [sequence count];i++){
         hasChanged = NO;
-        int direction = arc4random() % 4;
-        switch (direction) {
+        int directionIdx = arc4random() % [avaiable count];
+        NSLog(@"choosing direction %@",avaiable[directionIdx]);
+        switch ([avaiable[directionIdx]intValue]) {
             //UP
             case 0:{
                 y--;
@@ -174,7 +185,17 @@
                 break;
         }
         if(hasChanged){
-            [self placeAValideCubeView:x y:y withSequenceIdx:i+1];
+            NSLog(@"deprecated :%@",deprecated);
+            if([deprecated intValue] > -1){
+                [avaiable addObject:deprecated];
+            }
+            deprecated = avaiable[directionIdx];
+            [avaiable removeObject:avaiable[directionIdx]];
+            NSLog(@"After removing %@",avaiable );
+            NSLog(@"placing the value: %@",self.sequence[i]);
+            NSLog(@"===========");
+            [self.occupiedArray addObject:@[[NSNumber numberWithInt:x],[NSNumber numberWithInt:y]]];
+            [self placeAValideCubeView:x y:y withSequenceIdx:i];
         }
     }
 }
@@ -186,7 +207,18 @@
 {
     int boundaryX = 3;
     int boundaryY = 3;
-    return (x >= 0 && y>=0 && x<= boundaryX && y<=boundaryY);
+    return (x >= 0 && y>=0 && x<= boundaryX && y<=boundaryY) && ![self isOccupied:x y:y];
+}
+- (BOOL)isOccupied:(int)x y:(int)y
+{
+    for(int i = 0 ;i < [self.occupiedArray count]; i++)
+    {
+        if([self.occupiedArray[i][0] intValue] == x &&[self.occupiedArray[i][1] intValue] == y)
+        {
+            return YES;
+        }
+    }
+    return NO;
 }
 - (void)didReceiveMemoryWarning
 {
