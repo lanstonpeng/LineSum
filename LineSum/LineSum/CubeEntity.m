@@ -11,10 +11,13 @@
 @implementation CubeEntity
 
 -(instancetype)initWithView:(UIView*)cubeView x:(int)x y:(int)y{
-    CubeEntity* cubeEntity = [[CubeEntity alloc]init];
-    cubeEntity.cubeView = cubeView;
-    cubeEntity.x = [NSNumber numberWithInt:x];
-    cubeEntity.y = [NSNumber numberWithInt:y];
-    return cubeEntity;
+    if(self = [super init]){
+        self.cubeView = cubeView;
+        self.x = [NSNumber numberWithInt:x];
+        self.y = [NSNumber numberWithInt:y];
+        UILabel* numLabel = (UILabel*)[cubeView viewWithTag:LUCKY_NUM];
+        self.score = numLabel.text;
+    }
+    return self;
 }
 @end

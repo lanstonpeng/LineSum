@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#define LUCKY_NUM 806
 
 @interface CubeEntity : NSObject
 @property (strong,nonatomic)UIView* cubeView;
 @property (strong,nonatomic)NSNumber* x;
 @property (strong,nonatomic)NSNumber* y;
-
+@property (strong,nonatomic)NSString* score;
 -(instancetype)initWithView:(UIView*)cubeView x:(int)x y:(int)y;
 @end

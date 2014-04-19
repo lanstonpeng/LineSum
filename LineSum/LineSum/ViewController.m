@@ -87,8 +87,6 @@
     
     int idx =(x+ 4 * y + 1);
     UIView* currentView =[self.view viewWithTag:idx];
-    UILabel* numLabel = (UILabel*)[currentView viewWithTag:LUCKY_NUM];
-    int num = [numLabel.text intValue];
     __weak typeof(self) weakSelf = self;
     CubeEntity* cubeEntity = [[CubeEntity alloc]initWithView:currentView x:x y:y];
     
@@ -97,6 +95,8 @@
     //while it move inside the cube ,prevent it from running the logic again
     //the first time moving into the current view
     if(![self.cubePath isEqualToLastObject:cubeEntity]){
+        int num = [cubeEntity.score intValue];
+        NSLog(@"%d",num);
         //NSLog(@"not equal the last object");
         if(![self.cubePath containCubePath:cubeEntity]){
             //NSLog(@"not containing the cubeEntity");
@@ -109,7 +109,7 @@
             NSLog(@"prepare reverting ");
            [_cubePath revertPathAfterCubeView:cubeEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity) {
                [cubeEntity.cubeView setBackgroundColor:[Util randomColor]];
-                weakSelf.currentSum.text = [NSString stringWithFormat:@"%d",[self.currentSum.text intValue] - num];
+                weakSelf.currentSum.text = [NSString stringWithFormat:@"%d",[self.currentSum.text intValue] - [cubeEntity.score intValue]];
            }];
         }
     }
