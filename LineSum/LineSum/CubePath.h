@@ -15,5 +15,5 @@
 -(void)removeLastCubeView;
 -(BOOL)containCubePath:(CubeEntity*)cubeEntity;
 -(BOOL)isEqualToLastObject:(CubeEntity*)cubeEntity;
--(void)revertPathAfterCubeView:(CubeEntity*)cubeEntity executeBlokOnRevertedItem:(void (^)(CubeEntity* cubeEntity))executeBlock;
+-(void)revertPathAfterCubeView:(CubeEntity*)cubeEntity executeBlokOnRevertedItem:(void (^)(CubeEntity* cubeEntity))executeBlock includingBeginItem:(BOOL)isIncluded;
 @end

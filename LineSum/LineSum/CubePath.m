@@ -37,8 +37,11 @@
     }
     return NO;
 }
--(void)revertPathAfterCubeView:(CubeEntity*)cubeEntity executeBlokOnRevertedItem:(void (^)(CubeEntity* cubeEntity))executeBlock{
+-(void)revertPathAfterCubeView:(CubeEntity*)cubeEntity executeBlokOnRevertedItem:(void (^)(CubeEntity* cubeEntity))executeBlock includingBeginItem:(BOOL)isIncluded{
     NSUInteger idx = [self getCubeEntityIdx:cubeEntity];
+    if(!isIncluded){
+        idx++;
+    }
     int length = [self.cubePathArray count];
     for(;idx < length;idx++){
         CubeEntity* lastObject = [self.cubePathArray lastObject];

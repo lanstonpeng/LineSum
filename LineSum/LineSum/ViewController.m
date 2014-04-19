@@ -95,30 +95,32 @@
     //while it move inside the cube ,prevent it from running the logic again
     //the first time moving into the current view
     if(![self.cubePath isEqualToLastObject:cubeEntity]){
+        
+        //prevent diagonal line
+        if([self isDiagonalLine:x y:y]){
+            return;
+        }
         int num = [cubeEntity.score intValue];
         if(![self.cubePath containCubePath:cubeEntity]){
             [cubeEntity.cubeView setBackgroundColor:[UIColor whiteColor]];
-            [self.scoreBoardView addNum:num];
             [self.cubePath addCubeEntity:cubeEntity];
+            [self.scoreBoardView addNum:num];
         }
         //if the view is already in the path,we revert the path
         else{
-           [_cubePath revertPathAfterCubeView:cubeEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity) {
+           [_cubePath revertPathAfterCubeView:cubeEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity){
                [cubeEntity.cubeView setBackgroundColor:[Util generateColor]];
                [weakSelf.scoreBoardView minusNum:[cubeEntity.score intValue]];
-           }];
+           } includingBeginItem:NO];
         }
     }
     else if(sender.state == UIGestureRecognizerStateEnded){
         if([self.scoreBoardView getCurrentState] == LESS){
-            NSLog(@"ready to end pan in less mode");
-            
-            NSLog(@"count:%d",[self.cubePath.cubePathArray count]);
             CubeEntity* firstEntity = [self.cubePath.cubePathArray firstObject];
            [_cubePath revertPathAfterCubeView:firstEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity) {
                [cubeEntity.cubeView setBackgroundColor:[Util generateColor]];
                [weakSelf.scoreBoardView minusNum:[cubeEntity.score intValue]];
-           }];
+           } includingBeginItem:YES];
            [self.occupiedArray removeAllObjects];
             
         }
@@ -163,7 +165,6 @@
     for(int i = 0;i < [sequence count];i++){
         hasChanged = NO;
         int directionIdx = arc4random() % [avaiable count];
-//        NSLog(@"choosing direction %@",avaiable[directionIdx]);
         switch ([avaiable[directionIdx]intValue]) {
             //UP
             case 0:{
@@ -248,6 +249,26 @@
     }
     return NO;
 }
+//while the user pan too fast on diagonal line ,it would properly cause bug
+- (BOOL)isDiagonalLine:(int)x2 y:(int)y2{
+    CubeEntity* lastObject = [self.cubePath.cubePathArray lastObject];
+    if(!lastObject){
+        return NO;
+    }
+    int y1 = [lastObject.y intValue];
+    int x1 = [lastObject.x intValue];
+    if(y1 == y2){
+        if(x1 == x2 - 1 || x1 == x2 + 1){
+            return NO;
+        }
+    }
+    else if(x1 == x2){
+        if(y1 == y2 -1 || y1 == y2 + 1){
+            return NO;
+        }
+    }
+    return YES;
+}
 //- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
 //    NSLog(@"touch end");
 //}
@@ -279,6 +300,7 @@
     self.sum = [(NSNumber*)[dic objectForKey:@"sum"] integerValue];
     self.sumLabel.text = [[dic objectForKey:@"sum"] stringValue];
     self.scoreBoardView.targetSum = (int)self.sum;
+    [self.scoreBoardView resetNum];
     
     [self.containerView removeFromSuperview];
     self.containerView = [[UIView alloc]initWithFrame:CGRectMake(0, 100, IPHONE_SCREEN_WIDTH, IPHONE_SCREEN_HEIGHT)];
@@ -288,7 +310,7 @@
     
     [self generateGrid:self.sequence];
     [self lineUpSolutionPath:self.sequence];
-    [self.scoreBoardView resetNum];
+    [self.cubePath.cubePathArray removeAllObjects];
 }
 
 #pragma ScoreBoard delegate
