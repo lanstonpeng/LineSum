@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ScoreBoardView : UIView
--(void)initScoreBoradView:(NSUInteger)tagetSum;
+-(instancetype)initScoreBoradView:(NSUInteger)targetSum;
 -(void)addNum:(NSUInteger)num;
 -(void)minusNum:(NSUInteger)num;
 @end

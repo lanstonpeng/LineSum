@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "Util.h"
 #import "CubePath.h"
+#import "ScoreBoardView.h"
+
 @interface ViewController : UIViewController
 
 @end

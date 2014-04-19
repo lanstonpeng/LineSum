@@ -8,20 +8,26 @@
 
 #import "ScoreBoardView.h"
 
+@interface ScoreBoardView()
+@property (strong,nonatomic)UILabel* scoreLabel;
+@end
+
 @implementation ScoreBoardView
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
+-(instancetype)initScoreBoradView:(NSUInteger)targetSum{
+    if(self = [super init]){
+        self.scoreLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 50, 120, 40)];
+        self.scoreLabel.text = [NSString stringWithFormat:@"%d",(int)targetSum];
+        [self addSubview:self.scoreLabel];
     }
     return self;
 }
-
--(void)initScoreBoradView:(NSUInteger)tagetSum{}
--(void)addNum:(NSUInteger)num{}
--(void)minusNum:(NSUInteger)num{}
+-(void)addNum:(NSUInteger)num{
+    self.scoreLabel.text = [NSString stringWithFormat:@"%d",[self.scoreLabel.text intValue] + num];
+}
+-(void)minusNum:(NSUInteger)num{
+    self.scoreLabel.text = [NSString stringWithFormat:@"%d",[self.scoreLabel.text intValue] - num];
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
