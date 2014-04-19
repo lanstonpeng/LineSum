@@ -10,7 +10,7 @@
 
 #define GRID_WIDTH 4
 #define GRID_HEIGHT 4
-#define UP_PADDING 100
+#define UP_PADDING 10
 #define CUBE_WIDTH 80
 #define CUBE_LINE_COUNT 4
 #define CUBE_COUNT 3
@@ -20,13 +20,13 @@
 @property (strong,nonatomic)NSArray* sequence;
 @property (nonatomic)NSUInteger sum;
 @property (strong,nonatomic)NSMutableArray* cubeViews;
-@property (strong,nonatomic)UILabel* currentSum;
 @property (strong,nonatomic)NSMutableArray* usedIndexArray;
 @property (strong,nonatomic)NSMutableArray* occupiedArray;
 @property (strong,nonatomic)NSMutableArray* occupiedCubeViewArray;
 @property (strong,nonatomic)UIView* containerView;
 @property (strong,nonatomic)CubePath* cubePath;
 @property (strong,nonatomic)UIButton* restartBtn;
+@property (strong,nonatomic)ScoreBoardView* scoreBoardView;
 @end
 
 
@@ -59,35 +59,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
     NSDictionary* dic = [Util generateNumbers:CUBE_COUNT];
     self.sequence = [dic objectForKey:@"sequence"];
     self.sum = (NSUInteger)[dic objectForKey:@"sum"];
+    [self initGameUI];
+    
+    //Text Label
     UILabel* sumLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 50, 120, 40)];
     sumLabel.text = [[dic objectForKey:@"sum"] stringValue];
-    self.currentSum = [[UILabel alloc]initWithFrame:CGRectMake(150, 50, 50, 40 )];
-    self.containerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, IPHONE_SCREEN_WIDTH, IPHONE_SCREEN_HEIGHT)];
-    self.restartBtn = [[UIButton alloc]initWithFrame:CGRectMake(200, 50, 100, 40)];
-    [self.restartBtn setTitle:@"restart" forState:UIControlStateNormal];
-    self.restartBtn.backgroundColor = [Util randomColor];
-    [self.currentSum setBackgroundColor:[Util randomColor]];
-    self.currentSum.text = @"0";
-    [self generateGrid:self.sequence];
-    
     [self.view addSubview:sumLabel];
-    [self.view addSubview:self.currentSum];
-    [self.view addSubview:self.restartBtn];
-    UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
-    [panGesture setMaximumNumberOfTouches:1];
-    [self.view addGestureRecognizer:panGesture];
+    
+    [self generateGrid:self.sequence];
     [self lineUpSolutionPath:self.sequence];
 }
 -(void)handlePan:(UIPanGestureRecognizer *)sender
 {
-    //NSLog(@"start paning x %f",[sender translationInView:self.view].x );
-    
-    double pointerX = [sender locationInView:self.view].x;
-    double pointerY = [sender locationInView:self.view].y - UP_PADDING;
+    double pointerX = [sender locationInView:self.containerView].x;
+    double pointerY = [sender locationInView:self.containerView].y - UP_PADDING;
     
     int x =  pointerX / (GRID_WIDTH * CUBE_WIDTH ) * GRID_WIDTH;
     int y = pointerY / (GRID_HEIGHT * CUBE_WIDTH) * GRID_HEIGHT;
@@ -105,7 +93,7 @@
         int num = [cubeEntity.score intValue];
         if(![self.cubePath containCubePath:cubeEntity]){
             [cubeEntity.cubeView setBackgroundColor:[UIColor whiteColor]];
-            self.currentSum.text = [NSString stringWithFormat:@"%d",[self.currentSum.text intValue] + num];
+            [self.scoreBoardView addNum:num];
             [self.cubePath addCubeEntity:cubeEntity];
         }
         //if the view is already in the path,we revert the path
@@ -113,7 +101,7 @@
             NSLog(@"prepare reverting ");
            [_cubePath revertPathAfterCubeView:cubeEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity) {
                [cubeEntity.cubeView setBackgroundColor:[Util randomColor]];
-                weakSelf.currentSum.text = [NSString stringWithFormat:@"%d",[self.currentSum.text intValue] - [cubeEntity.score intValue]];
+               [weakSelf.scoreBoardView minusNum:[cubeEntity.score intValue]];
            }];
         }
     }
@@ -137,7 +125,7 @@
     for(;i< GRID_WIDTH * GRID_HEIGHT; i++){
         UIView* cubeView =[self generateCube:CGRectMake( i * CUBE_WIDTH % (int)IPHONE_SCREEN_WIDTH, UP_PADDING + (i / CUBE_LINE_COUNT) * CUBE_WIDTH, CUBE_WIDTH, CUBE_WIDTH) withNum:[NSNumber numberWithInt:i ]];
         [cubeView setTag:i+1];
-        [self.view addSubview:cubeView];
+        [self.containerView addSubview:cubeView];
     }
 }
 - (void)placeAValideCubeView:(int)x y:(int)y withSequenceIdx:(NSUInteger)index
@@ -245,17 +233,37 @@
     }
     return NO;
 }
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    NSLog(@"touch end");
-}
--(void)initGame{
+//- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+//    NSLog(@"touch end");
+//}
+-(void)initGameUI{
     
-    NSDictionary* dic = [Util generateNumbers:CUBE_COUNT];
-    self.sequence = [dic objectForKey:@"sequence"];
-    self.sum = (NSUInteger)[dic objectForKey:@"sum"];
+    self.scoreBoardView = [[ScoreBoardView alloc]initScoreBoradView:0];
+    
+    self.containerView = [[UIView alloc]initWithFrame:CGRectMake(0, 100, IPHONE_SCREEN_WIDTH, IPHONE_SCREEN_HEIGHT)];
+    self.restartBtn = [[UIButton alloc]initWithFrame:CGRectMake(200, 50, 100, 40)];
+    [self.restartBtn setTitle:@"Restart" forState:UIControlStateNormal];
+    self.restartBtn.backgroundColor = [Util randomColor];
+    self.scoreBoardView.backgroundColor = [Util randomColor];
+    
+    [self.view addSubview:self.containerView];
+    [self.view addSubview:self.scoreBoardView];
+    [self.view addSubview:self.restartBtn];
+    
+    UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
+    [panGesture setMaximumNumberOfTouches:1];
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(restartGame)];
+    [self.restartBtn addGestureRecognizer:tapGesture];
+    [self.view addGestureRecognizer:panGesture];
 }
 -(void)restartGame
 {
-    
+    [self.containerView removeFromSuperview];
+    self.containerView = [[UIView alloc]initWithFrame:CGRectMake(0, 100, IPHONE_SCREEN_WIDTH, IPHONE_SCREEN_HEIGHT)];
+    [self.view addSubview:self.containerView];
+    [self.occupiedArray removeAllObjects];
+    [self generateGrid:self.sequence];
+    [self lineUpSolutionPath:self.sequence];
+    [self.scoreBoardView resetNum];
 }
 @end

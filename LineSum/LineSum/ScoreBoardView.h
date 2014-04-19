@@ -12,4 +12,5 @@
 -(instancetype)initScoreBoradView:(NSUInteger)targetSum;
 -(void)addNum:(NSUInteger)num;
 -(void)minusNum:(NSUInteger)num;
+-(void)resetNum;
 @end

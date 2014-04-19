@@ -138,8 +138,7 @@
 				9D103E4018FFE51000BF200A /* Main.storyboard */,
 				9D103E4318FFE51000BF200A /* ViewController.h */,
 				9D103E4418FFE51000BF200A /* ViewController.m */,
-				9D11E61B1900C51A002D6B2C /* ScoreBoardView.h */,
-				9D11E61C1900C51A002D6B2C /* ScoreBoardView.m */,
+				9D473A8F19021037006F80BF /* View */,
 				9D103E4618FFE51000BF200A /* Images.xcassets */,
 				9D103E3518FFE51000BF200A /* Supporting Files */,
 			);
@@ -204,6 +203,15 @@
 				9D11E6D1190157AB002D6B2C /* CubeEntity.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		9D473A8F19021037006F80BF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9D11E61B1900C51A002D6B2C /* ScoreBoardView.h */,
+				9D11E61C1900C51A002D6B2C /* ScoreBoardView.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

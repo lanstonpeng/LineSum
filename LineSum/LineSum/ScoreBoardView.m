@@ -16,7 +16,8 @@
 
 -(instancetype)initScoreBoradView:(NSUInteger)targetSum{
     if(self = [super init]){
-        self.scoreLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 50, 120, 40)];
+        self.frame = CGRectMake(120, 50, 50, 40);
+        self.scoreLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 50, 40)];
         self.scoreLabel.text = [NSString stringWithFormat:@"%d",(int)targetSum];
         [self addSubview:self.scoreLabel];
     }
@@ -28,13 +29,8 @@
 -(void)minusNum:(NSUInteger)num{
     self.scoreLabel.text = [NSString stringWithFormat:@"%d",[self.scoreLabel.text intValue] - num];
 }
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
+-(void)resetNum{
+    self.scoreLabel.text = @"0";
 }
-*/
 
 @end
