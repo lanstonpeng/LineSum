@@ -15,7 +15,7 @@
 #define CUBE_LINE_COUNT 4
 #define CUBE_COUNT 3
 
-@interface ViewController ()
+@interface ViewController ()<scoreTargetDelgate>
 
 @property (strong,nonatomic)NSArray* sequence;
 @property (nonatomic)NSUInteger sum;
@@ -27,6 +27,7 @@
 @property (strong,nonatomic)CubePath* cubePath;
 @property (strong,nonatomic)UIButton* restartBtn;
 @property (strong,nonatomic)ScoreBoardView* scoreBoardView;
+@property (strong,nonatomic)UILabel* sumLabel;
 @end
 
 
@@ -61,19 +62,23 @@
     [super viewDidLoad];
     NSDictionary* dic = [Util generateNumbers:CUBE_COUNT];
     self.sequence = [dic objectForKey:@"sequence"];
-    self.sum = (NSUInteger)[dic objectForKey:@"sum"];
+    self.sum = [(NSNumber*)[dic objectForKey:@"sum"] integerValue];
     [self initGameUI];
     
     //Text Label
-    UILabel* sumLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 50, 120, 40)];
-    sumLabel.text = [[dic objectForKey:@"sum"] stringValue];
-    [self.view addSubview:sumLabel];
+    self.sumLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 50, 120, 40)];
+    self.sumLabel.text = [[dic objectForKey:@"sum"] stringValue];
+    [self.view addSubview:self.sumLabel];
     
     [self generateGrid:self.sequence];
     [self lineUpSolutionPath:self.sequence];
 }
 -(void)handlePan:(UIPanGestureRecognizer *)sender
 {
+    //Alert View will trigger pan gesture of such state
+    if(sender.state == UIGestureRecognizerStateCancelled){
+        return;
+    }
     double pointerX = [sender locationInView:self.containerView].x;
     double pointerY = [sender locationInView:self.containerView].y - UP_PADDING;
     
@@ -98,7 +103,6 @@
         }
         //if the view is already in the path,we revert the path
         else{
-            NSLog(@"prepare reverting ");
            [_cubePath revertPathAfterCubeView:cubeEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity) {
                [cubeEntity.cubeView setBackgroundColor:[Util randomColor]];
                [weakSelf.scoreBoardView minusNum:[cubeEntity.score intValue]];
@@ -238,7 +242,8 @@
 //}
 -(void)initGameUI{
     
-    self.scoreBoardView = [[ScoreBoardView alloc]initScoreBoradView:0];
+    self.scoreBoardView = [[ScoreBoardView alloc]initScoreBoradView:_sum
+                                                       withDelegate:self];
     
     self.containerView = [[UIView alloc]initWithFrame:CGRectMake(0, 100, IPHONE_SCREEN_WIDTH, IPHONE_SCREEN_HEIGHT)];
     self.restartBtn = [[UIButton alloc]initWithFrame:CGRectMake(200, 50, 100, 40)];
@@ -258,6 +263,11 @@
 }
 -(void)restartGame
 {
+    NSDictionary* dic = [Util generateNumbers:CUBE_COUNT];
+    self.sequence = [dic objectForKey:@"sequence"];
+    self.sum = [(NSNumber*)[dic objectForKey:@"sum"] integerValue];
+    self.sumLabel.text = [[dic objectForKey:@"sum"] stringValue];
+    self.scoreBoardView.targetSum = self.sum;
     [self.containerView removeFromSuperview];
     self.containerView = [[UIView alloc]initWithFrame:CGRectMake(0, 100, IPHONE_SCREEN_WIDTH, IPHONE_SCREEN_HEIGHT)];
     [self.view addSubview:self.containerView];
@@ -265,5 +275,27 @@
     [self generateGrid:self.sequence];
     [self lineUpSolutionPath:self.sequence];
     [self.scoreBoardView resetNum];
+}
+
+#pragma ScoreBoard delegate
+- (void)onScoreBigger{
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"OOps"
+                                                      message:@"Too Big Buddy"
+                                                     delegate:nil
+                                            cancelButtonTitle:@"OK"
+                                            otherButtonTitles:nil];
+    
+    [message show];
+    [self restartGame];
+}
+- (void)onScoreEqual{
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Yep"
+                                                      message:@"You got it"
+                                                     delegate:nil
+                                            cancelButtonTitle:@"OK"
+                                            otherButtonTitles:nil];
+    
+    [message show];
+    [self restartGame];
 }
 @end

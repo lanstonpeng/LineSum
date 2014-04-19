@@ -20,7 +20,6 @@
     return _cubePathArray;
 }
 -(void)addCubeEntity:(CubeEntity*)cubeEntity{
-    NSLog(@"adding");
     [self.cubePathArray addObject:cubeEntity];
 }
 -(BOOL)containCubePath:(CubeEntity*)cubeEntity{
