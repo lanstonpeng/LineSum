@@ -75,6 +75,9 @@
     
     [self generateGrid:self.sequence];
     [self lineUpSolutionPath:self.sequence];
+    
+    [[UIApplication sharedApplication]setStatusBarHidden:YES];
+   
 }
 -(void)handlePan:(UIPanGestureRecognizer *)sender
 {
@@ -166,6 +169,7 @@
     UILabel* numLabel = (UILabel*)[currentView viewWithTag:LUCKY_NUM];
     NSNumber* number = self.sequence[index];
     
+    currentView.backgroundColor = [Util generateColorWithNum:[number stringValue]];
     numLabel.attributedText = [self generateLabelAttributeString:[number stringValue]];
 }
 - (void)lineUpSolutionPath:(NSArray*)sequence
