@@ -9,8 +9,8 @@
 #import "ScoreBoardView.h"
 
 @interface ScoreBoardView()
-@property (strong,nonatomic)UILabel* scoreLabel;
 @property (strong,nonatomic)id<scoreTargetDelgate> delegate;
+@property  (nonatomic)ScoreState scoreState;
 @end
 
 @implementation ScoreBoardView
@@ -23,34 +23,42 @@
         [self addSubview:self.scoreLabel];
         self.targetSum = (int)targetSum;
         self.delegate = delegate;
+        self.scoreState = LESS;
     }
     return self;
 }
 -(void)addNum:(NSUInteger)num{
-    int updateScore =[self.scoreLabel.text intValue] + num;
+    int updateScore =[self.scoreLabel.text intValue] +(int)num;
     if (updateScore == self.targetSum) {
         if([self.delegate respondsToSelector:@selector(onScoreEqual)]){
+            self.scoreState = EQUAL;
             [self.delegate onScoreEqual];
         }
     }
     else if(updateScore > self.targetSum){
         if([self.delegate respondsToSelector:@selector(onScoreBigger)]){
+            self.scoreState = BIGGER;
             [self.delegate onScoreBigger];
         }
     }
     else{
         if([self.delegate respondsToSelector:@selector(onScoreLess)]){
+            self.scoreState = LESS;
             [self.delegate onScoreLess];
         }
         self.scoreLabel.text = [NSString stringWithFormat:@"%d",updateScore];
     }
 }
 -(void)minusNum:(NSUInteger)num{
-    int updateScore =[self.scoreLabel.text intValue] - num;
+    int updateScore =[self.scoreLabel.text intValue] - (int)num;
     self.scoreLabel.text = [NSString stringWithFormat:@"%d",updateScore];
 }
 -(void)resetNum{
     self.scoreLabel.text = @"0";
+    self.scoreState = LESS;
+}
+-(ScoreState)getCurrentState{
+    return self.scoreState;
 }
 
 @end

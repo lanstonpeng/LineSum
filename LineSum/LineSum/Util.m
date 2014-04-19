@@ -38,7 +38,7 @@
     }
     return target;
 }
-+(UIColor*)randomColor{
++(UIColor*)generateColor{
     switch (arc4random()%6) {
         case 0: return UIColorFromRGB(0x50ecb3);
         case 1: return UIColorFromRGB(0xb350ec);

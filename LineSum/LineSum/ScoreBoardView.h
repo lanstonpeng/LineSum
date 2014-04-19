@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    LESS = 0,
+    EQUAL,
+    BIGGER
+}ScoreState;
+
 @protocol scoreTargetDelgate <NSObject>
 
 @optional
@@ -20,8 +26,10 @@
 
 @interface ScoreBoardView : UIView
 @property (nonatomic)int targetSum;
+@property (strong,nonatomic)UILabel* scoreLabel;
 -(instancetype)initScoreBoradView:(int)targetSum withDelegate:(id<scoreTargetDelgate>)delegate;
 -(void)addNum:(NSUInteger)num;
 -(void)minusNum:(NSUInteger)num;
 -(void)resetNum;
+-(ScoreState)getCurrentState;
 @end

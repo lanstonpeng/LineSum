@@ -11,5 +11,5 @@
 @interface Util : NSObject
 
 + (NSDictionary*)generateNumbers:(NSUInteger)count;
-+ (UIColor*)randomColor;
++ (UIColor*)generateColor;
 @end

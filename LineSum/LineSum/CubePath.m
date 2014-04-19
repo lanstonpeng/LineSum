@@ -9,7 +9,6 @@
 #import "CubePath.h"
 
 @interface CubePath()
-@property (strong,nonatomic)NSMutableArray* cubePathArray;
 @end
 
 @implementation CubePath
@@ -40,7 +39,8 @@
 }
 -(void)revertPathAfterCubeView:(CubeEntity*)cubeEntity executeBlokOnRevertedItem:(void (^)(CubeEntity* cubeEntity))executeBlock{
     NSUInteger idx = [self getCubeEntityIdx:cubeEntity];
-    for(;idx < [self.cubePathArray count];idx++){
+    int length = [self.cubePathArray count];
+    for(;idx < length;idx++){
         CubeEntity* lastObject = [self.cubePathArray lastObject];
         executeBlock(lastObject);
         [self.cubePathArray removeLastObject];

@@ -104,19 +104,30 @@
         //if the view is already in the path,we revert the path
         else{
            [_cubePath revertPathAfterCubeView:cubeEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity) {
-               [cubeEntity.cubeView setBackgroundColor:[Util randomColor]];
+               [cubeEntity.cubeView setBackgroundColor:[Util generateColor]];
                [weakSelf.scoreBoardView minusNum:[cubeEntity.score intValue]];
            }];
         }
     }
-    if(sender.state == UIGestureRecognizerStateEnded){
-        NSLog(@"Pan End");
+    else if(sender.state == UIGestureRecognizerStateEnded){
+        if([self.scoreBoardView getCurrentState] == LESS){
+            NSLog(@"ready to end pan in less mode");
+            
+            NSLog(@"count:%d",[self.cubePath.cubePathArray count]);
+            CubeEntity* firstEntity = [self.cubePath.cubePathArray firstObject];
+           [_cubePath revertPathAfterCubeView:firstEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity) {
+               [cubeEntity.cubeView setBackgroundColor:[Util generateColor]];
+               [weakSelf.scoreBoardView minusNum:[cubeEntity.score intValue]];
+           }];
+           [self.occupiedArray removeAllObjects];
+            
+        }
     }
     
 }
 - (UIView*)generateCube:(CGRect)frame withNum:(id)currentNum{
     UIView* cubeView = [[UIView alloc]initWithFrame:frame];
-    [cubeView setBackgroundColor:[Util randomColor]];
+    [cubeView setBackgroundColor:[Util generateColor]];
     NSNumber* num = currentNum;
     UILabel* numLabel = [[UILabel alloc]initWithFrame:CGRectMake(30, 15, 50, 50)];
     numLabel.text = [NSString stringWithFormat:@"%d",[num intValue]];
@@ -242,14 +253,14 @@
 //}
 -(void)initGameUI{
     
-    self.scoreBoardView = [[ScoreBoardView alloc]initScoreBoradView:_sum
+    self.scoreBoardView = [[ScoreBoardView alloc]initScoreBoradView:(int)_sum
                                                        withDelegate:self];
     
     self.containerView = [[UIView alloc]initWithFrame:CGRectMake(0, 100, IPHONE_SCREEN_WIDTH, IPHONE_SCREEN_HEIGHT)];
     self.restartBtn = [[UIButton alloc]initWithFrame:CGRectMake(200, 50, 100, 40)];
     [self.restartBtn setTitle:@"Restart" forState:UIControlStateNormal];
-    self.restartBtn.backgroundColor = [Util randomColor];
-    self.scoreBoardView.backgroundColor = [Util randomColor];
+    self.restartBtn.backgroundColor = [Util generateColor];
+    self.scoreBoardView.backgroundColor = [Util generateColor];
     
     [self.view addSubview:self.containerView];
     [self.view addSubview:self.scoreBoardView];
@@ -267,11 +278,14 @@
     self.sequence = [dic objectForKey:@"sequence"];
     self.sum = [(NSNumber*)[dic objectForKey:@"sum"] integerValue];
     self.sumLabel.text = [[dic objectForKey:@"sum"] stringValue];
-    self.scoreBoardView.targetSum = self.sum;
+    self.scoreBoardView.targetSum = (int)self.sum;
+    
     [self.containerView removeFromSuperview];
     self.containerView = [[UIView alloc]initWithFrame:CGRectMake(0, 100, IPHONE_SCREEN_WIDTH, IPHONE_SCREEN_HEIGHT)];
     [self.view addSubview:self.containerView];
+    
     [self.occupiedArray removeAllObjects];
+    
     [self generateGrid:self.sequence];
     [self lineUpSolutionPath:self.sequence];
     [self.scoreBoardView resetNum];

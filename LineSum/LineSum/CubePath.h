@@ -10,7 +10,7 @@
 #import "CubeEntity.h"
 
 @interface CubePath : NSObject
-
+@property (strong,nonatomic)NSMutableArray* cubePathArray;
 -(void)addCubeEntity:(CubeEntity*)cubeEntity;
 -(void)removeLastCubeView;
 -(BOOL)containCubePath:(CubeEntity*)cubeEntity;
