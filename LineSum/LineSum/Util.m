@@ -49,4 +49,39 @@
     }
     return UIColorFromRGB(0xec5089);
 }
++ (UIColor*)generateColorWithNum:(NSString*)valString{
+    int value = [valString intValue];
+    switch (value) {
+        case 1:{
+            return UIColorFromRGB(0xE0E4CC);
+        }
+        case 2:{
+            return UIColorFromRGB(0xC8CBB6);
+        }
+        case 3:{
+            return UIColorFromRGB(0xA7DBD8);
+        }
+        case 4:{
+            return UIColorFromRGB(0x95C3C1);
+        }
+        case 5:{
+            return UIColorFromRGB(0x69D2E7);
+        }
+        case 6:{
+            return UIColorFromRGB(0x5DBBCE);
+        }
+        case 7:{
+            return UIColorFromRGB(0xF38630);
+        }
+        case 8:{
+            return UIColorFromRGB(0xD9772A);
+        }
+        case 9:{
+            return UIColorFromRGB(0xFA6900);
+        }
+        default:{
+            return UIColorFromRGB(0xDF5D00);
+        }
+    }
+}
 @end

@@ -12,4 +12,5 @@
 
 + (NSDictionary*)generateNumbers:(NSUInteger)count;
 + (UIColor*)generateColor;
++ (UIColor*)generateColorWithNum:(NSString*)valString;
 @end

@@ -42,7 +42,7 @@
     if(!isIncluded){
         idx++;
     }
-    int length = [self.cubePathArray count];
+    int length = (int)[self.cubePathArray count];
     for(;idx < length;idx++){
         CubeEntity* lastObject = [self.cubePathArray lastObject];
         executeBlock(lastObject);
