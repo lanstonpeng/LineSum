@@ -38,6 +38,8 @@
 
 @property (nonatomic)BOOL hasTapOnContainer;
 @property (strong,nonatomic)UIView* hintViewRef;
+
+@property  (strong,nonatomic)UIPanGestureRecognizer* panGesture;
 @end
 
 
@@ -158,7 +160,7 @@
                [weakSelf.scoreBoardView minusNum:[cubeEntity.score intValue]];
            } includingBeginItem:YES];
            [self.occupiedArray removeAllObjects];
-            
+            [self showMessage:@"Nope" withMsg:@"Too Small"];
         }
     }
     
@@ -370,11 +372,11 @@
     [self.view addSubview:self.scoreBoardView];
     [self.view addSubview:self.restartBtn];
     
-    UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
-    [panGesture setMaximumNumberOfTouches:1];
+    self.panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
+    [self.panGesture setMaximumNumberOfTouches:1];
     UITapGestureRecognizer* restartTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(restartGame)];
     [self.restartBtn addGestureRecognizer:restartTap];
-    [self.view addGestureRecognizer:panGesture];
+    [self.containerView addGestureRecognizer:self.panGesture];
     UITapGestureRecognizer* containerTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
     [self.containerView addGestureRecognizer:containerTap];
 }
@@ -389,6 +391,7 @@
     
     [self.containerView removeFromSuperview];
     self.containerView = [[UIView alloc]initWithFrame:CGRectMake(0, 100, IPHONE_SCREEN_WIDTH, IPHONE_SCREEN_HEIGHT)];
+    [self.containerView addGestureRecognizer:self.panGesture];
     [self.view addSubview:self.containerView];
     
     [self.occupiedArray removeAllObjects];
