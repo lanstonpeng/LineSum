@@ -17,8 +17,7 @@
 
 //Game Cube Value
 #define CUBE_VALUE_MAX 9
-
-@interface ViewController ()<scoreTargetDelgate>
+@interface ViewController ()<ScoreTargetDelgate,TimeBarDelegate>
 
 @property (strong,nonatomic)NSArray* sequence;
 @property (nonatomic)NSUInteger sum;
@@ -31,6 +30,8 @@
 @property (strong,nonatomic)UIButton* restartBtn;
 @property (strong,nonatomic)ScoreBoardView* scoreBoardView;
 @property (strong,nonatomic)UILabel* sumLabel;
+@property (strong,nonatomic)TimeBar* timeBar;
+@property (strong,nonatomic)NSTimer* timeBarTimer;
 @end
 
 
@@ -76,9 +77,38 @@
     [self generateGrid:self.sequence];
     [self lineUpSolutionPath:self.sequence];
     
+    self.timeBar = [[TimeBar alloc]init];
+    self.timeBar.backgroundColor = [Util generateColor];
+    [self.view addSubview:self.timeBar];
+   
+    self.timeBar.delegate =self;
+    [self prepareTimer];
+    
+    //Full Screen
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
    
 }
+-(void)prepareTimer{
+    self.timeBar.frame = CGRectMake(0, 0, IPHONE_SCREEN_WIDTH, 10);
+    self.timeBar.percentage = 1.0;
+    self.timeBarTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(dropProgress) userInfo:nil repeats:YES];
+    [[NSRunLoop mainRunLoop]addTimer:self.timeBarTimer forMode:NSDefaultRunLoopMode];
+}
+
+#pragma time bar delegate
+-(void)onTimesUp{
+    [self.timeBarTimer invalidate];
+    [self showMessage:@"Oops" withMsg:@"You ran out of time"];
+    [self restartGame];
+}
+
+#pragma drop progress timer
+-(void)dropProgress
+{
+    [self.timeBar dropProgressByPersentage:0.01];
+}
+
+#pragma handle Pan gesture
 -(void)handlePan:(UIPanGestureRecognizer *)sender
 {
     //Alert View will trigger pan gesture of such state
@@ -156,7 +186,7 @@
     int i = 0;
     int randomNumber;
     for(;i< GRID_WIDTH * GRID_HEIGHT; i++){
-        randomNumber = arc4random() % CUBE_VALUE_MAX;
+        randomNumber = arc4random() % (CUBE_VALUE_MAX - 1) + 1;
         UIView* cubeView =[self generateCube:CGRectMake( i * CUBE_WIDTH % (int)IPHONE_SCREEN_WIDTH, UP_PADDING + (i / CUBE_LINE_COUNT) * CUBE_WIDTH, CUBE_WIDTH, CUBE_WIDTH) withNum:randomNumber];
         [cubeView setTag:i+1];
         [self.containerView addSubview:cubeView];
@@ -329,27 +359,29 @@
     [self generateGrid:self.sequence];
     [self lineUpSolutionPath:self.sequence];
     [self.cubePath.cubePathArray removeAllObjects];
+    
+    [self.timeBarTimer invalidate];
+    [self prepareTimer];
 }
 
-#pragma ScoreBoard delegate
-- (void)onScoreBigger{
-    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"OOps"
-                                                      message:@"Too Big Buddy"
+-(void)showMessage:(NSString*)title withMsg:(NSString*)msg{
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:title
+                                                      message:msg
                                                      delegate:nil
                                             cancelButtonTitle:@"OK"
                                             otherButtonTitles:nil];
     
     [message show];
+}
+#pragma ScoreBoard delegate
+- (void)onScoreBigger{
+    [self showMessage:@"Oops" withMsg:@"Too Big Buddy"];
     [self restartGame];
 }
 - (void)onScoreEqual{
-    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Yep"
-                                                      message:@"You got it"
-                                                     delegate:nil
-                                            cancelButtonTitle:@"OK"
-                                            otherButtonTitles:nil];
+    //[self showMessage:@"Yep" withMsg:@"You got it"];
     
-    [message show];
+    [self.timeBar addProgressByPersentage:0.15f];
     [self restartGame];
 }
 @end

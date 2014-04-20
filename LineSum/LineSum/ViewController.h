@@ -10,6 +10,7 @@
 #import "Util.h"
 #import "CubePath.h"
 #import "ScoreBoardView.h"
+#import "TimeBar.h"
 
 @interface ViewController : UIViewController
 

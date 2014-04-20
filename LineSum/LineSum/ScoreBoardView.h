@@ -14,7 +14,7 @@ typedef enum {
     BIGGER
 }ScoreState;
 
-@protocol scoreTargetDelgate <NSObject>
+@protocol ScoreTargetDelgate <NSObject>
 
 @optional
 -(void)onScoreLess;
@@ -27,7 +27,7 @@ typedef enum {
 @interface ScoreBoardView : UIView
 @property (nonatomic)int targetSum;
 @property (strong,nonatomic)UILabel* scoreLabel;
--(instancetype)initScoreBoradView:(int)targetSum withDelegate:(id<scoreTargetDelgate>)delegate;
+-(instancetype)initScoreBoradView:(int)targetSum withDelegate:(id<ScoreTargetDelgate>)delegate;
 -(void)addNum:(NSUInteger)num;
 -(void)minusNum:(NSUInteger)num;
 -(void)resetNum;

@@ -9,7 +9,7 @@
 #import "ScoreBoardView.h"
 
 @interface ScoreBoardView()
-@property (strong,nonatomic)id<scoreTargetDelgate> delegate;
+@property (strong,nonatomic)id<ScoreTargetDelgate> delegate;
 @property  (nonatomic)ScoreState scoreState;
 @end
 
