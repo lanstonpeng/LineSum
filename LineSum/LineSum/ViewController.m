@@ -17,6 +17,8 @@
 
 //Game Cube Value
 #define CUBE_VALUE_MAX 9
+#define CUBE_SELECTED_COLOR 0xFF6B6B
+
 @interface ViewController ()<ScoreTargetDelgate,TimeBarDelegate>
 
 @property (strong,nonatomic)NSArray* sequence;
@@ -32,11 +34,20 @@
 @property (strong,nonatomic)UILabel* sumLabel;
 @property (strong,nonatomic)TimeBar* timeBar;
 @property (strong,nonatomic)NSTimer* timeBarTimer;
+@property (strong,nonatomic)NSMutableArray* solutionIdxArray;
+
+@property (nonatomic)BOOL hasTapOnContainer;
+@property (strong,nonatomic)UIView* hintViewRef;
 @end
 
 
 @implementation ViewController
-
+- (NSMutableArray *)solutionIdxArray{
+    if(!_solutionIdxArray){
+        _solutionIdxArray = [[NSMutableArray alloc]init];
+    }
+    return  _solutionIdxArray;
+}
 - (NSMutableArray *)usedIndexArray{
     if(!_usedIndexArray){
         _usedIndexArray = [[NSMutableArray alloc]init];
@@ -88,29 +99,18 @@
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
    
 }
--(void)prepareTimer{
-    self.timeBar.frame = CGRectMake(0, 0, IPHONE_SCREEN_WIDTH, 10);
-    self.timeBar.percentage = 1.0;
-    self.timeBarTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(dropProgress) userInfo:nil repeats:YES];
-    [[NSRunLoop mainRunLoop]addTimer:self.timeBarTimer forMode:NSDefaultRunLoopMode];
+#pragma handle Tap gesture
+-(void)handleTap:(UITapGestureRecognizer*)sender{
+    self.hasTapOnContainer = YES;
+    [self stopBlink];
 }
-
-#pragma time bar delegate
--(void)onTimesUp{
-    [self.timeBarTimer invalidate];
-    [self showMessage:@"Oops" withMsg:@"You ran out of time"];
-    [self restartGame];
-}
-
-#pragma drop progress timer
--(void)dropProgress
-{
-    [self.timeBar dropProgressByPersentage:0.01];
-}
-
 #pragma handle Pan gesture
 -(void)handlePan:(UIPanGestureRecognizer *)sender
 {
+    if(self.hasTapOnContainer){
+        self.hasTapOnContainer = YES;
+        [self stopBlink];
+    }
     //Alert View will trigger pan gesture of such state
     if(sender.state == UIGestureRecognizerStateCancelled){
         return;
@@ -138,7 +138,7 @@
         }
         int num = [cubeEntity.score intValue];
         if(![self.cubePath containCubePath:cubeEntity]){
-            [cubeEntity.cubeView setBackgroundColor:UIColorFromRGB(0xFF6B6B)];
+            [cubeEntity.cubeView setBackgroundColor:UIColorFromRGB(CUBE_SELECTED_COLOR)];
             [self.cubePath addCubeEntity:cubeEntity];
             [self.scoreBoardView addNum:num];
         }
@@ -192,13 +192,48 @@
         [self.containerView addSubview:cubeView];
     }
 }
+- (void)giveAHint{
+    if([self.solutionIdxArray count] < 1){
+        return;
+    }
+    
+    int idx = [(NSNumber*)[self.solutionIdxArray firstObject] intValue];
+    self.hintViewRef =[self.view viewWithTag:idx];
+    
+    self.hintViewRef.alpha = 1.0f;
+    [UIView animateWithDuration:0.6
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut |
+     UIViewAnimationOptionRepeat |
+     UIViewAnimationOptionAutoreverse |
+     UIViewAnimationOptionAllowUserInteraction
+                     animations:^{
+                         self.hintViewRef.alpha = 0.3f;
+                     }
+                     completion:^(BOOL finished){
+                         // Do nothing
+                     }];
+}
+-(void)stopBlink{
+    [UIView animateWithDuration:0.12
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut |
+     UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         self.hintViewRef.alpha = 1.0f;
+                     }
+                     completion:^(BOOL finished){
+                         // Do nothing
+                     }];
+
+}
 - (void)placeAValideCubeView:(int)x y:(int)y withSequenceIdx:(NSUInteger)index
 {
     int idx = [self getIndex:x y:y];
     UIView* currentView =[self.view viewWithTag:idx];
     UILabel* numLabel = (UILabel*)[currentView viewWithTag:LUCKY_NUM];
     NSNumber* number = self.sequence[index];
-    
+    [self.solutionIdxArray addObject:[NSNumber numberWithInt:idx]];
     currentView.backgroundColor = [Util generateColorWithNum:[number stringValue]];
     numLabel.attributedText = [self generateLabelAttributeString:[number stringValue]];
 }
@@ -337,9 +372,11 @@
     
     UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
     [panGesture setMaximumNumberOfTouches:1];
-    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(restartGame)];
-    [self.restartBtn addGestureRecognizer:tapGesture];
+    UITapGestureRecognizer* restartTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(restartGame)];
+    [self.restartBtn addGestureRecognizer:restartTap];
     [self.view addGestureRecognizer:panGesture];
+    UITapGestureRecognizer* containerTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
+    [self.containerView addGestureRecognizer:containerTap];
 }
 -(void)restartGame
 {
@@ -362,6 +399,9 @@
     
     [self.timeBarTimer invalidate];
     [self prepareTimer];
+    
+    [self.solutionIdxArray removeAllObjects];
+    self.hasTapOnContainer = NO;
 }
 
 -(void)showMessage:(NSString*)title withMsg:(NSString*)msg{
@@ -373,15 +413,40 @@
     
     [message show];
 }
+
 #pragma ScoreBoard delegate
 - (void)onScoreBigger{
     [self showMessage:@"Oops" withMsg:@"Too Big Buddy"];
+    self.timeBar.percentage = 1.0;
     [self restartGame];
 }
 - (void)onScoreEqual{
     //[self showMessage:@"Yep" withMsg:@"You got it"];
-    
     [self.timeBar addProgressByPersentage:0.15f];
     [self restartGame];
+}
+
+-(void)prepareTimer{
+    self.timeBar.frame = CGRectMake(0, 0, IPHONE_SCREEN_WIDTH * self.timeBar.percentage, 10);
+    self.timeBarTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(dropProgress) userInfo:nil repeats:YES];
+    [[NSRunLoop mainRunLoop]addTimer:self.timeBarTimer forMode:NSDefaultRunLoopMode];
+}
+
+#pragma time bar delegate
+-(void)onTimesUp{
+    [self.timeBarTimer invalidate];
+    [self showMessage:@"Oops" withMsg:@"You ran out of time"];
+    self.timeBar.percentage = 1.0;
+    [self restartGame];
+}
+
+#pragma drop progress timer
+-(void)dropProgress
+{
+    [self.timeBar dropProgressByPersentage:0.01];
+    if(self.timeBar.percentage <= 0.98f && !self.hasTapOnContainer){
+        self.hasTapOnContainer = YES;
+        [self giveAHint];
+    }
 }
 @end
