@@ -26,4 +26,5 @@
 
 - (id)initWithFrame:(CGRect)frame withSolutionDic:(NSDictionary*)dic andScoreView:(ScoreBoardView*)scoreBoardView;
 - (void)giveAHint;
+- (void)revertAllCubePath;
 @end

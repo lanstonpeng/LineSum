@@ -288,7 +288,6 @@
     
     int idx =(x+ 4 * y + 1);
     UIView* currentView =[self viewWithTag:idx];
-    __weak typeof(self) weakSelf = self;
     CubeEntity* cubeEntity = [[CubeEntity alloc]initWithView:currentView x:x y:y];
     
     //Things to Do
@@ -309,19 +308,13 @@
         }
         //if the view is already in the path,we revert the path
         else{
-           [_cubePath revertPathAfterCubeView:cubeEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity){
-               [cubeEntity.cubeView setBackgroundColor:[Util generateColorWithNum:cubeEntity.score]];
-               [weakSelf.scoreBoardView minusNum:[cubeEntity.score intValue]];
-           } includingBeginItem:NO];
+            [self revertPathFrom:cubeEntity];
         }
     }
     else if(sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateCancelled){
-            CubeEntity* firstEntity = [self.cubePath.cubePathArray firstObject];
-           [_cubePath revertPathAfterCubeView:firstEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity) {
-               [cubeEntity.cubeView setBackgroundColor:[Util generateColorWithNum:cubeEntity.score]];
-               [weakSelf.scoreBoardView minusNum:[cubeEntity.score intValue]];
-           } includingBeginItem:YES];
-        
+        if([self.scoreBoardView getCurrentState] != EQUAL){
+            [self revertAllCubePath];
+        }
         if([self.scoreBoardView getCurrentState] == LESS){
             if([self.delegate respondsToSelector:@selector(onCubeContainerPanGestureEndWithLessScore)]){
                 [self.delegate performSelector:@selector(onCubeContainerPanGestureEndWithLessScore) withObject:nil];
@@ -369,6 +362,21 @@
 
 }
 
+
+- (void)revertAllCubePath{
+    CubeEntity* firstEntity = [self.cubePath.cubePathArray firstObject];
+    [self revertPathFrom:firstEntity];
+}
+- (void)revertPathFrom:(CubeEntity*)cubeEntity
+{
+    __weak typeof(self) weakSelf = self;
+   [_cubePath revertPathAfterCubeView:cubeEntity executeBlokOnRevertedItem:^(CubeEntity *cubeEntity) {
+       [cubeEntity.cubeView setBackgroundColor:[Util generateColorWithNum:cubeEntity.score]];
+       [weakSelf.scoreBoardView minusNum:[cubeEntity.score intValue]];
+   } includingBeginItem:YES];
+}
+
+#warning what's that
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return YES;
 }

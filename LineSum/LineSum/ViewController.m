@@ -71,8 +71,6 @@
 }
 -(void)initGameUI{
     
-    
-    
     self.timeBar = [[TimeBarView alloc]init];
     self.timeBar.backgroundColor = [Util generateColor];
     self.timeBar.delegate =self;
@@ -95,10 +93,10 @@
     self.sequence = [dic objectForKey:@"sequence"];
     self.sum = [(NSNumber*)[dic objectForKey:@"sum"] integerValue];
     self.sumLabel.text = [[dic objectForKey:@"sum"] stringValue];
+    [self.cubeContainerView removeFromSuperview];
+    
     self.scoreBoardView.targetSum = (int)self.sum;
     [self.scoreBoardView resetNum];
-    
-    [self.cubeContainerView removeFromSuperview];
     CGRect frame = CGRectMake(0, 100, IPHONE_SCREEN_WIDTH, IPHONE_SCREEN_HEIGHT);
     self.cubeContainerView = [[CubeContainerView alloc]initWithFrame:frame withSolutionDic:dic andScoreView:self.scoreBoardView];
     self.cubeContainerView.delegate = self;
@@ -125,13 +123,16 @@
 #pragma ScoreBoard delegate
 - (void)onScoreBigger{
     [self showMessage:@"Oops" withMsg:@"Too Big"];
+    [self.cubeContainerView revertAllCubePath];
+    [self.scoreBoardView resetNum];
+    [self showMessage:@"Nope" withMsg:@""];
     //self.timeBar.percentage = 1.0;
     //[self restartGame];
 }
 - (void)onScoreEqual{
     [self showMessage:@"Yep" withMsg:@"You Win"];
     [self.timeBar addProgressByPersentage:0.15f];
-    //[self restartGame];
+    [self restartGame];
 }
 
 -(void)prepareTimer{
