@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Vtm. All rights reserved.
 //
 
-#import "TimeBar.h"
+#import "TimeBarView.h"
 
 #define PROGRESS_DURATION 0.2f
 
-@interface TimeBar()
+@interface TimeBarView()
 @end
 
-@implementation TimeBar
+@implementation TimeBarView
 
 - (id)initWithFrame:(CGRect)frame
 {

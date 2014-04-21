@@ -17,7 +17,7 @@
 
 -(instancetype)initScoreBoradView:(int)targetSum withDelegate:(id)delegate{
     if(self = [super init]){
-        self.frame = CGRectMake(120, 50, 50, 40);
+        self.frame = CGRectMake(50, 50, 50, 40);
         self.scoreLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 50, 40)];
         self.scoreLabel.text = [NSString stringWithFormat:@"%d",0];
         [self addSubview:self.scoreLabel];

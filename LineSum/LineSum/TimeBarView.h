@@ -13,7 +13,7 @@
 @optional
 -(void)onTimesUp;
 @end
-@interface TimeBar : UIView
+@interface TimeBarView : UIView
 @property (strong,nonatomic)id<TimeBarDelegate> delegate;
 @property (nonatomic)double percentage;
 -(void)dropProgressByPersentage:(double)delta;

@@ -27,7 +27,8 @@
 		9D11E61D1900C51A002D6B2C /* ScoreBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D11E61C1900C51A002D6B2C /* ScoreBoardView.m */; };
 		9D11E6201900F9F3002D6B2C /* CubePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D11E61F1900F9F3002D6B2C /* CubePath.m */; };
 		9D11E6D2190157AB002D6B2C /* CubeEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D11E6D1190157AB002D6B2C /* CubeEntity.m */; };
-		9D9F06681902BADB008F5F8C /* TimeBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9F06671902BADB008F5F8C /* TimeBar.m */; };
+		9D9F06681902BADB008F5F8C /* TimeBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9F06671902BADB008F5F8C /* TimeBarView.m */; };
+		9DA334B41903EE4E00627027 /* CubeContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DA334B31903EE4E00627027 /* CubeContainerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,8 +73,10 @@
 		9D11E61F1900F9F3002D6B2C /* CubePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CubePath.m; sourceTree = "<group>"; };
 		9D11E6D0190157AB002D6B2C /* CubeEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeEntity.h; sourceTree = "<group>"; };
 		9D11E6D1190157AB002D6B2C /* CubeEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CubeEntity.m; sourceTree = "<group>"; };
-		9D9F06661902BADB008F5F8C /* TimeBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBar.h; sourceTree = "<group>"; };
-		9D9F06671902BADB008F5F8C /* TimeBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeBar.m; sourceTree = "<group>"; };
+		9D9F06661902BADB008F5F8C /* TimeBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeBarView.h; sourceTree = "<group>"; };
+		9D9F06671902BADB008F5F8C /* TimeBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeBarView.m; sourceTree = "<group>"; };
+		9DA334B21903EE4E00627027 /* CubeContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeContainerView.h; sourceTree = "<group>"; };
+		9DA334B31903EE4E00627027 /* CubeContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CubeContainerView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,10 +214,12 @@
 		9D473A8F19021037006F80BF /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9D9F06661902BADB008F5F8C /* TimeBar.h */,
-				9D9F06671902BADB008F5F8C /* TimeBar.m */,
+				9D9F06661902BADB008F5F8C /* TimeBarView.h */,
+				9D9F06671902BADB008F5F8C /* TimeBarView.m */,
 				9D11E61B1900C51A002D6B2C /* ScoreBoardView.h */,
 				9D11E61C1900C51A002D6B2C /* ScoreBoardView.m */,
+				9DA334B21903EE4E00627027 /* CubeContainerView.h */,
+				9DA334B31903EE4E00627027 /* CubeContainerView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -327,8 +332,9 @@
 				9D103E3B18FFE51000BF200A /* main.m in Sources */,
 				9D103E6518FFE53E00BF200A /* Util.m in Sources */,
 				9D103EA518FFEF7F00BF200A /* DeviceInfo.mm in Sources */,
-				9D9F06681902BADB008F5F8C /* TimeBar.m in Sources */,
+				9D9F06681902BADB008F5F8C /* TimeBarView.m in Sources */,
 				9D103EA618FFEF7F00BF200A /* UIDevice+screenType.m in Sources */,
+				9DA334B41903EE4E00627027 /* CubeContainerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
