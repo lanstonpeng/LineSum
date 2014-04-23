@@ -17,7 +17,7 @@
 //The width of cube
 #define CUBE_WIDTH 80
 
-//
+// 320 / CUBE_WIDTH
 #define CUBE_LINE_COUNT 4
 
 //the "offically" number of solution
@@ -245,26 +245,44 @@
 
 #pragma handle Tap gesture
 -(void)handleCubeTap:(UITapGestureRecognizer*)sender{
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch* touch = [touches anyObject];
+    CGPoint pt = [touch locationInView:self];
     self.hasTapOnContainer = YES;
-    double pointerX = [sender locationInView:self].x;
-    double pointerY = [sender locationInView:self].y - UP_PADDING;
+    
+    double pointerX = pt.x;
+    double pointerY = pt.y;
     
     int x =  pointerX / (GRID_WIDTH * CUBE_WIDTH ) * GRID_WIDTH;
     int y = pointerY / (GRID_HEIGHT * CUBE_WIDTH) * GRID_HEIGHT;
     int idx =(x+ 4 * y + 1);
     
     UIView* currentView =[self viewWithTag:idx];
-    UILabel* numLabel = (UILabel*)[currentView viewWithTag:LUCKY_NUM];
-    if(sender.state == UIGestureRecognizerStateBegan){
-        [currentView setBackgroundColor:UIColorFromRGB(CUBE_SELECTED_COLOR)];
-    }
-    else if(sender.state == UIGestureRecognizerStateEnded){
+    [currentView setBackgroundColor:UIColorFromRGB(CUBE_SELECTED_COLOR)];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+}
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    if(self.hasTapOnContainer == YES){
+        UITouch* touch = [touches anyObject];
+        CGPoint pt = [touch locationInView:self];
+        
+        double pointerX = pt.x;
+        double pointerY = pt.y;
+        
+        int x =  pointerX / (GRID_WIDTH * CUBE_WIDTH ) * GRID_WIDTH;
+        int y = pointerY / (GRID_HEIGHT * CUBE_WIDTH) * GRID_HEIGHT;
+        int idx =(x + 4 * y + 1);
+        UIView* currentView =[self viewWithTag:idx];
+        UILabel* numLabel = (UILabel*)[currentView viewWithTag:LUCKY_NUM];
         [currentView setBackgroundColor:[Util generateColorWithNum:numLabel.text]];
     }
-}
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    NSLog(@"oh yeah");
 }
 
 #pragma handle Pan gesture
@@ -376,11 +394,6 @@
    } includingBeginItem:YES];
 }
 
-#warning what's that
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
-    return YES;
-}
-
 - (void)resetParameter{
        //removing the occuiped solution array idx for placing the new
        [self.occupiedArray removeAllObjects];
@@ -398,14 +411,18 @@
         self.containerPanGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handleCubePan:)];
         [self.containerPanGesture setMaximumNumberOfTouches:1];
         [self addGestureRecognizer:self.containerPanGesture];
+        [self.containerPanGesture setCancelsTouchesInView:NO];
+        /*
         self.containerTapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleCubeTap:)];
         [self addGestureRecognizer:self.containerTapGesture];
-        self.containerTapGesture.delegate = self;
+         */
         [self resetParameter];
         [self generateGrid:self.solutionSequence];
         [self lineUpSolutionPath:self.solutionSequence];
         
         self.scoreBoardView = scoreBoardView;
+        
+        [self setMultipleTouchEnabled:NO];
     }
     return self;
 }

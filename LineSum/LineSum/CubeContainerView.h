@@ -18,7 +18,7 @@
 -(void)onCubeContainerPanGestureEndWithLessScore;
 @end
 
-@interface CubeContainerView : UIView<UIGestureRecognizerDelegate>
+@interface CubeContainerView : UIView
 //literally
 @property (nonatomic)BOOL hasTapOnContainer;
 
