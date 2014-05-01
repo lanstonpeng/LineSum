@@ -67,7 +67,7 @@
     
     //Full Screen
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
-   
+    
 }
 -(void)initGameUI{
     
@@ -155,10 +155,11 @@
 #pragma drop progress timer
 -(void)dropProgress
 {
-    [self.timeBar dropProgressByPersentage:0.04];
+    [self.timeBar dropProgressByPersentage:0.02];
     if(self.timeBar.percentage <= 0.88f && !self.cubeContainerView.hasTapOnContainer){
         self.cubeContainerView.hasTapOnContainer = YES;
         [self.cubeContainerView giveAHint];
     }
 }
+
 @end
