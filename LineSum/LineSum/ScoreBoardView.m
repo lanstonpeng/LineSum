@@ -23,7 +23,7 @@
         [self addSubview:self.scoreLabel];
         self.targetSum = (int)targetSum;
         self.delegate = delegate;
-        self.scoreState = LESS;
+        self.scoreState = ScoreLESS;
     }
     return self;
 }
@@ -31,19 +31,19 @@
     int updateScore =[self.scoreLabel.text intValue] +(int)num;
     if (updateScore == self.targetSum) {
         if([self.delegate respondsToSelector:@selector(onScoreEqual)]){
-            self.scoreState = EQUAL;
+            self.scoreState = ScoreEQUAL;
             [self.delegate onScoreEqual];
         }
     }
     else if(updateScore > self.targetSum){
         if([self.delegate respondsToSelector:@selector(onScoreBigger)]){
-            self.scoreState = BIGGER;
+            self.scoreState = ScoreBIGGER;
             [self.delegate onScoreBigger];
         }
     }
     else{
         if([self.delegate respondsToSelector:@selector(onScoreLess)]){
-            self.scoreState = LESS;
+            self.scoreState = ScoreLESS;
             [self.delegate onScoreLess];
         }
         self.scoreLabel.text = [NSString stringWithFormat:@"%d",updateScore];
@@ -55,7 +55,7 @@
 }
 -(void)resetNum{
     self.scoreLabel.text = @"0";
-    self.scoreState = LESS;
+    self.scoreState = ScoreLESS;
 }
 -(ScoreState)getCurrentState{
     return self.scoreState;

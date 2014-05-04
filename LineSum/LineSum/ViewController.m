@@ -125,7 +125,6 @@
     [self showMessage:@"Oops" withMsg:@"Too Big"];
     [self.cubeContainerView revertAllCubePath];
     [self.scoreBoardView resetNum];
-    [self showMessage:@"Nope" withMsg:@""];
     //self.timeBar.percentage = 1.0;
     //[self restartGame];
 }
@@ -155,7 +154,7 @@
 #pragma drop progress timer
 -(void)dropProgress
 {
-    [self.timeBar dropProgressByPersentage:0.02];
+    [self.timeBar dropProgressByPersentage:0.005];
     if(self.timeBar.percentage <= 0.88f && !self.cubeContainerView.hasTapOnContainer){
         self.cubeContainerView.hasTapOnContainer = YES;
         [self.cubeContainerView giveAHint];

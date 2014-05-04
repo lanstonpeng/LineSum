@@ -52,6 +52,7 @@
 
 //well ,this is the ugly stuff, cubeContainerView is tied to scoreBoardView
 @property (strong,nonatomic)ScoreBoardView* scoreBoardView;
+
 @end
 
 @implementation CubeContainerView
@@ -252,7 +253,7 @@
     UITouch* touch = [touches anyObject];
     CGPoint pt = [touch locationInView:self];
     self.hasTapOnContainer = YES;
-    
+    self.gameState = GameInit;
     double pointerX = pt.x;
     double pointerY = pt.y;
     
@@ -288,16 +289,13 @@
 #pragma handle Pan gesture
 -(void)handleCubePan:(UIPanGestureRecognizer *)sender
 {
+    if(self.gameState == GameRevertCauseBigger){
+        return;
+    }
     if(!self.hasTapOnContainer){
         self.hasTapOnContainer = YES;
         [self stopBlink];
     }
-    /*
-     //Alert View will trigger pan gesture of such state
-    if(sender.state == UIGestureRecognizerStateCancelled){
-        return;
-    }
-     */
     double pointerX = [sender locationInView:self].x;
     double pointerY = [sender locationInView:self].y - UP_PADDING;
     
@@ -308,10 +306,7 @@
     UIView* currentView =[self viewWithTag:idx];
     CubeEntity* cubeEntity = [[CubeEntity alloc]initWithView:currentView x:x y:y];
     
-    //Things to Do
-    //record the cube path so that we can change the status while users moving back
-    //while it move inside the cube ,prevent it from running the logic again
-    //the first time moving into the current view
+    //TODO: record the cube path so that we can change the status while users moving back while it move inside the cube ,prevent it from running the logic again the first time moving into the current view
     if(![self.cubePath isEqualToLastObject:cubeEntity]){
         
         //prevent diagonal line
@@ -330,10 +325,10 @@
         }
     }
     else if(sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateCancelled){
-        if([self.scoreBoardView getCurrentState] != EQUAL){
+        if([self.scoreBoardView getCurrentState] != ScoreEQUAL){
             [self revertAllCubePath];
         }
-        if([self.scoreBoardView getCurrentState] == LESS){
+        if([self.scoreBoardView getCurrentState] == ScoreLESS){
             if([self.delegate respondsToSelector:@selector(onCubeContainerPanGestureEndWithLessScore)]){
                 [self.delegate performSelector:@selector(onCubeContainerPanGestureEndWithLessScore) withObject:nil];
             }
@@ -343,7 +338,7 @@
 }
 
 
-#pragma generate Cube
+#pragma other
 - (void)giveAHint{
     if([self.solutionIdxArray count] < 1){
         return;
@@ -384,6 +379,7 @@
 - (void)revertAllCubePath{
     CubeEntity* firstEntity = [self.cubePath.cubePathArray firstObject];
     [self revertPathFrom:firstEntity];
+    self.gameState = GameRevertCauseBigger;
 }
 - (void)revertPathFrom:(CubeEntity*)cubeEntity
 {

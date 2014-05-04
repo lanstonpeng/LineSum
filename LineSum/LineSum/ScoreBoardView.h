@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    LESS = 0,
-    EQUAL,
-    BIGGER
+    ScoreLESS = 0,
+    ScoreEQUAL,
+    ScoreBIGGER
 }ScoreState;
 
 @protocol ScoreTargetDelgate <NSObject>

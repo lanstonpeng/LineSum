@@ -12,6 +12,13 @@
 #import "Util.h"
 #import "ScoreBoardView.h"
 
+typedef enum{
+    GameInit = 0,
+    GameRevertCauseBigger,
+    GameRevertCauseSmaller,
+    GameLoseCauseTimeout
+}GameState;
+
 @protocol CubeContainerDelegate <NSObject>
 
 @optional
@@ -19,8 +26,12 @@
 @end
 
 @interface CubeContainerView : UIView
+
 //literally
 @property (nonatomic)BOOL hasTapOnContainer;
+
+//Flag for contorlling the game
+@property (nonatomic)GameState gameState;
 
 @property (strong,nonatomic)id<CubeContainerDelegate> delegate;
 
