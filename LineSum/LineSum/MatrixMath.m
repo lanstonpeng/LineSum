@@ -32,65 +32,67 @@
     [self dfs4:0 withX:0 withY:0];
     return NO;
 }
+
+-(void)printResult:(NSArray*)result
+{
+    int x;
+    int y;
+    NSString* item;
+    NSArray* temp;
+    for(int i = 0 ;i < [result count] ; i++){
+        item = result[i];
+        temp = [item componentsSeparatedByString:@":"];
+        x = [temp[0] integerValue];
+        y = [temp[1] integerValue];
+        NSLog(@"%d",[_matrix[x][y] integerValue]);
+    }
+}
+/**
+ *  DFS for 4 directions
+ *
+ *  @param sum current sum of numberes
+ *  @param x   literally
+ *  @param y   literally
+ *
+ *  @return flag(not used here)
+ */
 -(int)dfs4:(int)sum withX:(int)x withY:(int)y{
     
     int currentNum = [_matrix[x][y] integerValue];
-    if([_stack containsObject:@(currentNum)]){
+    NSString* numStr = [NSString stringWithFormat:@"%d:%d",x,y];
+    if([_stack containsObject:numStr]){
         return -1;
     }
-    NSLog(@"curr: %d",currentNum);
     sum = currentNum + sum;
-    NSLog(@"sum: %d",sum);
-    NSLog(@"------------");
     if(sum == _result){
-        [_stack addObject:@(currentNum)];
-        NSLog(@"yep %@",_stack);
+        [_stack addObject:numStr];
+        [self printResult:_stack];
         return 1;
     }
-    [_stack addObject:@(currentNum)];
+    [_stack addObject:numStr];
     if(sum > _result){
         [_stack removeObject:[_stack lastObject]];
         return -1;
     }
     //right
     if( ++y <= _yBoundary){
-        /*
-        if([self dfs4:sum withX:x withY:y] < 0){
-            [_stack removeObject:[_stack lastObject]];
-            return 1;
-        }*/
         [self dfs4:sum withX:x withY:y];
     }
     y--;
     //down
     if( ++x <= _xBoundary){
-        /*
-        if([self dfs4:sum withX:x withY:y] < 0){
-            [_stack removeObject:[_stack lastObject]];
-            return 1;
-        }*/
         [self dfs4:sum withX:x withY:y];
     }
     x--;
     
     //left
     if(--y >= 0){
-        /*
-        if([self dfs4:sum withX:x withY:y] < 0){
-            [_stack removeObject:[_stack lastObject]];
-            return 1;
-        }*/
         [self dfs4:sum withX:x withY:y];
     }
     y++;
     
     //up
     if(--x >= 0 ){
-        /*
-        if([self dfs4:sum withX:x withY:y] < 0){
-            [_stack removeObject:[_stack lastObject]];
-            return 1;
-        }*/
         [self dfs4:sum withX:x withY:y];
     }
     x++;

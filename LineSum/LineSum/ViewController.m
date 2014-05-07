@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "MatrixMath.h"
 
 #define GRID_WIDTH 4
 #define GRID_HEIGHT 4
@@ -67,6 +68,18 @@
     
     //Full Screen
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
+    
+    
+    //MatrixMath
+    MatrixMath* matrixMath = [MatrixMath new];
+    int sum = 10;
+    NSArray* arr = @[
+                     @[@1,@3,@5,@6],
+                     @[@8,@6,@6,@7],
+                     @[@7,@3,@9,@2],
+                     @[@4,@4,@2,@9],
+                    ];
+    [matrixMath isMatrixValid:arr withSum:sum];
     
 }
 -(void)initGameUI{
@@ -160,5 +173,8 @@
         [self.cubeContainerView giveAHint];
     }
 }
-
+//FIXME: touchBegan的时候开始积分
+//TODO: decouple message Box functionality
+//TODO: change the cube UI to dot UI
+//TODO: add level feature
 @end

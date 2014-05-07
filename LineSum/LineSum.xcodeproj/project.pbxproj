@@ -30,6 +30,7 @@
 		9D42838C1912165F00BF08C7 /* AdMobView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D42838B1912165F00BF08C7 /* AdMobView.m */; };
 		9D9F06681902BADB008F5F8C /* TimeBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D9F06671902BADB008F5F8C /* TimeBarView.m */; };
 		9DA334B41903EE4E00627027 /* CubeContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DA334B31903EE4E00627027 /* CubeContainerView.m */; };
+		9DB10ADE191A4D3E00925E11 /* MatrixMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DB10ADD191A4D3E00925E11 /* MatrixMath.m */; };
 		9DDD545C190F89AA006E1B43 /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DDD545A190F89AA006E1B43 /* libGoogleAdMobAds.a */; };
 		9DDD545D190F89AA006E1B43 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9DDD545B190F89AA006E1B43 /* README.txt */; };
 		9DDD545F190F8AE7006E1B43 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DDD545E190F8AE7006E1B43 /* CFNetwork.framework */; };
@@ -90,6 +91,8 @@
 		9D9F06671902BADB008F5F8C /* TimeBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeBarView.m; sourceTree = "<group>"; };
 		9DA334B21903EE4E00627027 /* CubeContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeContainerView.h; sourceTree = "<group>"; };
 		9DA334B31903EE4E00627027 /* CubeContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CubeContainerView.m; sourceTree = "<group>"; };
+		9DB10ADC191A4D3E00925E11 /* MatrixMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatrixMath.h; sourceTree = "<group>"; };
+		9DB10ADD191A4D3E00925E11 /* MatrixMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatrixMath.m; sourceTree = "<group>"; };
 		9DDD5360190F87EE006E1B43 /* libGoogleAdMobAds.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAdMobAds.a; path = "../../../../Downloads/GoogleAdMobAdsSdkiOS-6.5.1/libGoogleAdMobAds.a"; sourceTree = "<group>"; };
 		9DDD5451190F89AA006E1B43 /* GADAdMobExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADAdMobExtras.h; sourceTree = "<group>"; };
 		9DDD5452190F89AA006E1B43 /* GADAdNetworkExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADAdNetworkExtras.h; sourceTree = "<group>"; };
@@ -239,6 +242,8 @@
 				9D103EA218FFEF7F00BF200A /* DeviceInfo.mm */,
 				9D103EA318FFEF7F00BF200A /* UIDevice+screenType.h */,
 				9D103EA418FFEF7F00BF200A /* UIDevice+screenType.m */,
+				9DB10ADC191A4D3E00925E11 /* MatrixMath.h */,
+				9DB10ADD191A4D3E00925E11 /* MatrixMath.m */,
 				9D103E6318FFE53E00BF200A /* Util.h */,
 				9D103E6418FFE53E00BF200A /* Util.m */,
 			);
@@ -404,6 +409,7 @@
 				9D42838C1912165F00BF08C7 /* AdMobView.m in Sources */,
 				9D11E61D1900C51A002D6B2C /* ScoreBoardView.m in Sources */,
 				9D103E3B18FFE51000BF200A /* main.m in Sources */,
+				9DB10ADE191A4D3E00925E11 /* MatrixMath.m in Sources */,
 				9D103E6518FFE53E00BF200A /* Util.m in Sources */,
 				9D103EA518FFEF7F00BF200A /* DeviceInfo.mm in Sources */,
 				9D9F06681902BADB008F5F8C /* TimeBarView.m in Sources */,
