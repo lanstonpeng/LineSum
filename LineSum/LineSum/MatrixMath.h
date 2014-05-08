@@ -10,5 +10,11 @@
 
 @interface MatrixMath : NSObject
 
--(BOOL)isMatrixValid:(NSArray*)matrix withSum:(NSInteger)sum;
+// init with array and size
+- (id)initWithArray:(NSArray*)array andSize:(CGSize)size;
+
+-(BOOL)isSumExist:(int)sum;
+
+@property (strong, nonatomic) NSMutableArray* result;
+
 @end

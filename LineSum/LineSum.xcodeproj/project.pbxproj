@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		50FBC863191B7A1D00C5B14C /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50FBC862191B7A1D00C5B14C /* GameViewController.m */; };
 		9D103E2F18FFE51000BF200A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D103E2E18FFE51000BF200A /* Foundation.framework */; };
 		9D103E3118FFE51000BF200A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D103E3018FFE51000BF200A /* CoreGraphics.framework */; };
 		9D103E3318FFE51000BF200A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D103E3218FFE51000BF200A /* UIKit.framework */; };
@@ -14,7 +15,7 @@
 		9D103E3B18FFE51000BF200A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D103E3A18FFE51000BF200A /* main.m */; };
 		9D103E3F18FFE51000BF200A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D103E3E18FFE51000BF200A /* AppDelegate.m */; };
 		9D103E4218FFE51000BF200A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9D103E4018FFE51000BF200A /* Main.storyboard */; };
-		9D103E4518FFE51000BF200A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D103E4418FFE51000BF200A /* ViewController.m */; };
+		9D103E4518FFE51000BF200A /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9D103E4418FFE51000BF200A /* ViewController.mm */; };
 		9D103E4718FFE51000BF200A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D103E4618FFE51000BF200A /* Images.xcassets */; };
 		9D103E4E18FFE51000BF200A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D103E4D18FFE51000BF200A /* XCTest.framework */; };
 		9D103E4F18FFE51000BF200A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D103E2E18FFE51000BF200A /* Foundation.framework */; };
@@ -54,6 +55,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		50FBC861191B7A1D00C5B14C /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		50FBC862191B7A1D00C5B14C /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		9D103E2B18FFE51000BF200A /* LineSum.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LineSum.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D103E2E18FFE51000BF200A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9D103E3018FFE51000BF200A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -66,7 +69,7 @@
 		9D103E3E18FFE51000BF200A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9D103E4118FFE51000BF200A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9D103E4318FFE51000BF200A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		9D103E4418FFE51000BF200A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		9D103E4418FFE51000BF200A /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		9D103E4618FFE51000BF200A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9D103E4C18FFE51000BF200A /* LineSumTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LineSumTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D103E4D18FFE51000BF200A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -148,6 +151,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		50FBC860191B79FE00C5B14C /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				50FBC861191B7A1D00C5B14C /* GameViewController.h */,
+				50FBC862191B7A1D00C5B14C /* GameViewController.m */,
+			);
+			name = controller;
+			sourceTree = "<group>";
+		};
 		9D103E2218FFE51000BF200A = {
 			isa = PBXGroup;
 			children = (
@@ -190,6 +202,7 @@
 		9D103E3418FFE51000BF200A /* LineSum */ = {
 			isa = PBXGroup;
 			children = (
+				50FBC860191B79FE00C5B14C /* controller */,
 				9DDD5450190F89AA006E1B43 /* GoogleAdMobAdsSdkiOS-6.5.1 */,
 				9D103EA718FFEF8B00BF200A /* Util */,
 				9D11E6D3190157B0002D6B2C /* Model */,
@@ -199,7 +212,7 @@
 				9D103E3E18FFE51000BF200A /* AppDelegate.m */,
 				9D103E4018FFE51000BF200A /* Main.storyboard */,
 				9D103E4318FFE51000BF200A /* ViewController.h */,
-				9D103E4418FFE51000BF200A /* ViewController.m */,
+				9D103E4418FFE51000BF200A /* ViewController.mm */,
 				9D103E4618FFE51000BF200A /* Images.xcassets */,
 				9D103E3518FFE51000BF200A /* Supporting Files */,
 			);
@@ -402,8 +415,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9D103E4518FFE51000BF200A /* ViewController.m in Sources */,
+				9D103E4518FFE51000BF200A /* ViewController.mm in Sources */,
 				9D11E6D2190157AB002D6B2C /* CubeEntity.m in Sources */,
+				50FBC863191B7A1D00C5B14C /* GameViewController.m in Sources */,
 				9D11E6201900F9F3002D6B2C /* CubePath.m in Sources */,
 				9D103E3F18FFE51000BF200A /* AppDelegate.m in Sources */,
 				9D42838C1912165F00BF08C7 /* AdMobView.m in Sources */,
@@ -555,7 +569,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7EA2B0F7-7AF9-4711-A151-078B07DA209C";
+				PROVISIONING_PROFILE = "7BA4201D-C112-4018-AEEA-6F9C0F938ED3";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
@@ -581,7 +595,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7EA2B0F7-7AF9-4711-A151-078B07DA209C";
+				PROVISIONING_PROFILE = "7BA4201D-C112-4018-AEEA-6F9C0F938ED3";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};

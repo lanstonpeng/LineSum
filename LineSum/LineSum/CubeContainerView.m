@@ -286,6 +286,10 @@
     }
 }
 
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+}
+
 #pragma handle Pan gesture
 -(void)handleCubePan:(UIPanGestureRecognizer *)sender
 {

@@ -8,8 +8,6 @@
 
 #import "ViewController.h"
 #import "MatrixMath.h"
-
-#define GRID_WIDTH 4
 #define GRID_HEIGHT 4
 #define UP_PADDING 10
 #define CUBE_WIDTH 80
@@ -68,19 +66,14 @@
     
     //Full Screen
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
-    
-    
-    //MatrixMath
-    MatrixMath* matrixMath = [MatrixMath new];
-    int sum = 10;
     NSArray* arr = @[
-                     @[@1,@3,@5,@6],
-                     @[@8,@6,@6,@7],
-                     @[@7,@3,@9,@2],
-                     @[@4,@4,@2,@9],
-                    ];
-    [matrixMath isMatrixValid:arr withSum:sum];
-    
+                     @2,@9,@5,@6,@1,
+                     @4,@9,@6,@7,@8,
+                     @9,@8,@1,@2,@2,
+                     @4,@7,@1,@9,@4,
+                     ];
+    MatrixMath* matrixMath = [[MatrixMath alloc] initWithArray:arr andSize:CGSizeMake(5, 4)];
+    [matrixMath isSumExist:10];
 }
 -(void)initGameUI{
     
