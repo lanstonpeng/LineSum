@@ -58,9 +58,6 @@
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    if ([self currectNum] == 10) {
-        return;
-    }
     UITouch* touch = [touches anyObject];
     _movePoint = [touch locationInView:self];
     UIView* view = [self hitTest:_movePoint withEvent:nil];
@@ -70,7 +67,7 @@
         if ([self view:cell.tag isNearby:preCell.tag]) {
             if ([_selectedCell containsObject:cell]) {
                 if([_selectedCell indexOfObject:preCell] -[_selectedCell indexOfObject:cell] == 1) {
-                        [_selectedCell removeLastObject];
+                    [_selectedCell removeLastObject];
                 }
             } else {
                 if ([self currectNum] + cell.number <= 10) {
