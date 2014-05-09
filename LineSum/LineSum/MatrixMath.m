@@ -51,7 +51,6 @@
         int index = [result[i] intValue];
         int posx = index/(_size.width-0.5);
         int posy = index%(int)_size.width;
-        NSLog(@"%d,%d : %@",posx, posy, _matrix[index]);
     }
 }
 /**

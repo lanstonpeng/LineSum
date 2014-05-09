@@ -8,6 +8,7 @@
 
 #import "GameBoardView.h"
 #import "GameBoardCell.h"
+#import "MatrixMath.h"
 @import CoreGraphics;
 
 @interface GameBoardView()
@@ -35,7 +36,7 @@
 - (void)initNumbers {
     for (int i = 0; i < 5; i++) {
         for(int j = 0; j < 5; j++) {
-            GameBoardCell* view = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, 50, 50) andNum:(rand()%8+1)];
+            GameBoardCell* view = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, 50, 50) andNum:(rand()%4+1)];
             view.tag = i*5 + j + 1;
             CGPoint center = CGPointMake(40 + j*60, 40+i*60);
             _posArray[i*5 + j] = [NSValue valueWithCGPoint:center];
@@ -83,6 +84,17 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     if ([self currectNum] == 10) {
         [self relayoutCells];
+        NSMutableArray* array = [NSMutableArray new];
+        [self.subviews enumerateObjectsUsingBlock:^(UIView* view, NSUInteger idx, BOOL *stop) {
+            if ([view isKindOfClass:[GameBoardCell class]]) {
+                GameBoardCell* cell = (GameBoardCell*)view;
+                [array addObject:@(cell.number)];
+            }
+        }];
+        MatrixMath* matrixMath = [[MatrixMath alloc]initWithArray:array andSize:CGSizeMake(5, 5)];
+        if ([matrixMath isSumExist:10]) {
+            NSLog(@"%d",matrixMath.result.count);
+        }
     }
     [_selectedCell removeAllObjects];
     [self setNeedsDisplay];
@@ -186,7 +198,7 @@
     }];
     
     [addArray enumerateObjectsUsingBlock:^(NSNumber* obj, BOOL *stop) {
-        GameBoardCell* cell = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, 50, 50) andNum:(rand()%8+1)];
+        GameBoardCell* cell = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, 50, 50) andNum:(rand()%4+1)];
         [cell setTag:obj.intValue];
         NSValue* value = _posArray[obj.intValue-1];
         CGPoint desPos = [value CGPointValue];

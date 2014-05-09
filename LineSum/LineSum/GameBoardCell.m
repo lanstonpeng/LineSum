@@ -22,18 +22,43 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _number = num;
         self.layer.cornerRadius = frame.size.width/2;
         self.clipsToBounds = YES;
         self.backgroundColor = [UIColor greenColor];
         _numLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        [_numLabel setBackgroundColor:[UIColor clearColor]];
         [_numLabel setText:[NSString stringWithFormat:@"%d",num]];
         [_numLabel setFont:[UIFont boldSystemFontOfSize:30]];
         [_numLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:_numLabel];
+        self.number = num;
     }
     return self;
+}
+
+- (void)setNumber:(int)number {
+    _number = number;
+    switch (number) {
+        case 1:{
+            self.backgroundColor =  UIColorFromRGB(0xE0E4CC);
+            break;
+        }
+        case 2:{
+            self.backgroundColor =  UIColorFromRGB(0xC8CBB6);
+            break;
+        }
+        case 3:{
+            self.backgroundColor =  UIColorFromRGB(0xA7DBD8);
+            break;
+        }
+        case 4:{
+            self.backgroundColor =  UIColorFromRGB(0x95C3C1);
+            break;
+        }
+        case 5:{
+            self.backgroundColor =  UIColorFromRGB(0x69D2E7);
+            break;
+        }
+    }
 }
 
 @end
