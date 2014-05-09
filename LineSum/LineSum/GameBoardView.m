@@ -161,31 +161,23 @@
     
     NSMutableDictionary* moveDict = [NSMutableDictionary new];
     NSMutableSet* addArray = [NSMutableSet new];
-    [self.subviews enumerateObjectsUsingBlock:^(UIView* view, NSUInteger idx, BOOL *stop) {
-        if ([view isKindOfClass:[GameBoardCell class]]) {
-            GameBoardCell* cell = (GameBoardCell*)view;
-            int posx = (cell.tag-1)/4.5;
-            int posy = (cell.tag-1)%5;
-            int step = 0;
-            for (int i = posx + 1; i < 5; i++) {
-                int tag = i*5 + posy + 1;
-                GameBoardCell* cell = (GameBoardCell*)[self viewWithTag:tag];
-                if ([_selectedCell containsObject:cell]) {
-                    step++;
-                }
-            }
-            if (step > 0) {
-                int tag = (posx + step)*5 + posy + 1;
-                [moveDict setObject:@(tag) forKey:@(cell.tag)];
-                if (posx == 0) {
-                    for (int i = 0; i < step; i++) {
-                        int addtag = i*5 + posy + 1;
-                        [addArray addObject:@(addtag)];
-                    }
+    for (int posx = 0; posx < 5; posx++) {
+        int delIdx = 0;
+        for (int posy = 4; posy >= 0; posy--) {
+            int tag = posx+posy*5+1;
+            GameBoardCell* cell = (GameBoardCell*)[self viewWithTag:tag];
+            if ([_selectedCell containsObject:cell]) {
+                int desTag = delIdx*5 + 1 + posx ;
+                [addArray addObject:@(desTag)];
+                delIdx++;
+            } else {
+                int desTag = (posy+delIdx)*5 + 1 + posx;
+                if (desTag != tag) {
+                    [moveDict setObject:@(desTag) forKey:@(tag)];
                 }
             }
         }
-    }];
+    }
     
     [_selectedCell enumerateObjectsUsingBlock:^(GameBoardCell* cell, NSUInteger idx, BOOL *stop) {
         [cell removeFromSuperview];
@@ -205,7 +197,7 @@
         [self addSubview:cell];
     }];
     
-    [UIView animateWithDuration:0.5f animations:^{
+    [UIView animateWithDuration:0.3f animations:^{
         [moveDict enumerateKeysAndObjectsUsingBlock:^(NSNumber* key, NSNumber* obj, BOOL *stop) {
             GameBoardCell* moveCell = (GameBoardCell*)[self viewWithTag:obj.intValue];
             NSValue* value = _posArray[obj.intValue-1];
