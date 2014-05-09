@@ -10,4 +10,6 @@
 
 @interface GameBoardView : UIView
 
+- (void)layoutBoardWithCellNum:(int)num;
+
 @end

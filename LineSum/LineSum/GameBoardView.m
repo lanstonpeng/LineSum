@@ -10,8 +10,19 @@
 #import "GameBoardCell.h"
 #import "MatrixMath.h"
 @import CoreGraphics;
+@import AVFoundation;
+
+#define EDGE_INSET          (15)
+
+#define CELL_INSET          (10)
+
+#define BOARD_WIDTH         (320)
 
 @interface GameBoardView()
+
+@property (nonatomic) int cellNum;
+
+@property (nonatomic) int cellWidth;
 
 @property (strong, nonatomic) NSMutableArray* selectedCell;
 
@@ -19,27 +30,36 @@
 
 @property (nonatomic, strong) NSMutableArray* posArray;
 
+@property (nonatomic, strong) NSMutableArray* effectViewArray;
+
+@property (nonatomic, strong) NSMutableDictionary* playerForSound;
+
 @end
 
 @implementation GameBoardView
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
+        srand(time(NULL));
         [self setMultipleTouchEnabled:NO];
         _selectedCell = [NSMutableArray new];
         _posArray = [NSMutableArray new];
-        [self initNumbers];
+        _effectViewArray = [NSMutableArray new];
+        _playerForSound = [NSMutableDictionary new];
     }
     return self;
 }
 
-- (void)initNumbers {
-    for (int i = 0; i < 5; i++) {
-        for(int j = 0; j < 5; j++) {
-            GameBoardCell* view = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, 50, 50) andNum:(rand()%4+1)];
-            view.tag = i*5 + j + 1;
-            CGPoint center = CGPointMake(40 + j*60, 40+i*60);
-            _posArray[i*5 + j] = [NSValue valueWithCGPoint:center];
+- (void)layoutBoardWithCellNum:(int)num {
+    _cellNum = num;
+    int cellInset = CELL_INSET - (num - 3);
+    _cellWidth = (BOARD_WIDTH - 2*EDGE_INSET - (num-1)*cellInset)/num;
+    for (int i = 0; i < num; i++) {
+        for(int j = 0; j < num; j++) {
+            GameBoardCell* view = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, _cellWidth, _cellWidth) andNum:(rand()%num+1)];
+            view.tag = i*num + j + 1;
+            CGPoint center = CGPointMake(EDGE_INSET + _cellWidth/2 + j*(_cellWidth+cellInset), EDGE_INSET + _cellWidth/2 + i*(_cellWidth+cellInset));
+            _posArray[i*num + j] = [NSValue valueWithCGPoint:center];
             [view setCenter:center];
             [self addSubview:view];
         }
@@ -54,7 +74,9 @@
         GameBoardCell* cell = (GameBoardCell*)view;
         [_selectedCell addObject:cell];
         //add effect
-        [self addEffectToView:cell];
+        [self addEffectToView:cell withAnimation:YES];
+        // play sound
+        [self playSoundFXnamed:@"1.aif"];
     }
 }
 
@@ -69,11 +91,19 @@
             if ([_selectedCell containsObject:cell]) {
                 if([_selectedCell indexOfObject:preCell] -[_selectedCell indexOfObject:cell] == 1) {
                     [_selectedCell removeLastObject];
+                    [self removeEffectView];
                 }
             } else {
-                if ([self currectNum] + cell.number <= 10) {
+                if ([self currectNum] + cell.number < 10) {
                     [_selectedCell addObject:cell];
-                    [self addEffectToView:cell];
+                    [self addEffectToView:cell withAnimation:YES];
+                     [self playSoundFXnamed:[NSString stringWithFormat:@"%d.aif", _selectedCell.count]];
+                } else if([self currectNum] + cell.number == 10) {
+                    [_selectedCell addObject:cell];
+                    [self playSoundFXnamed:[NSString stringWithFormat:@"%d.aif", _selectedCell.count]];
+                    [_selectedCell enumerateObjectsUsingBlock:^(GameBoardCell* cell, NSUInteger idx, BOOL *stop) {
+                        [self addEffectToView:cell withAnimation:NO];
+                    }];
                 }
             }
         }
@@ -83,6 +113,8 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     if ([self currectNum] == 10) {
+        [self removeEffectView];
+        [self performSelector:@selector(playSoundFXnamed:) withObject:[NSString stringWithFormat:@"square_%d.aif", _selectedCell.count]];
         [self relayoutCells];
         NSMutableArray* array = [NSMutableArray new];
         [self.subviews enumerateObjectsUsingBlock:^(UIView* view, NSUInteger idx, BOOL *stop) {
@@ -91,7 +123,7 @@
                 [array addObject:@(cell.number)];
             }
         }];
-        MatrixMath* matrixMath = [[MatrixMath alloc]initWithArray:array andSize:CGSizeMake(5, 5)];
+        MatrixMath* matrixMath = [[MatrixMath alloc]initWithArray:array andSize:CGSizeMake(_cellNum, _cellNum)];
         if ([matrixMath isSumExist:10]) {
             NSLog(@"%d",matrixMath.result.count);
         }
@@ -106,11 +138,11 @@
 }
 
 - (BOOL)view:(int)tag1 isNearby:(int)tag2 {
-    if ( abs(tag1-tag2) == 5) {
+    if ( abs(tag1-tag2) == _cellNum) {
         return YES;
     }
     if (abs(tag1-tag2) == 1) {
-        if ((tag1%5)*(tag2%5) == 0 && (tag2%5+tag1%5 == 1)) {
+        if ((tag1%_cellNum)*(tag2%_cellNum) == 0 && (tag2%_cellNum+tag1%_cellNum == 1)) {
             return NO;
         }
         return YES;
@@ -126,19 +158,32 @@
     return sum;
 }
 
-- (void)addEffectToView:(GameBoardCell*)view {
+- (void)addEffectToView:(GameBoardCell*)view withAnimation:(BOOL)animate {
     UIView* effectView = [[UIView alloc] initWithFrame:view.frame];
     effectView.layer.cornerRadius = view.layer.cornerRadius;
     [effectView setBackgroundColor:view.backgroundColor];
-    effectView.transform = CGAffineTransformMakeScale(0.5, 0.5);
     [effectView setClipsToBounds:YES];
-    [self addSubview:effectView];
-    [UIView animateWithDuration:0.5f animations:^{
-        effectView.transform = CGAffineTransformMakeScale(2, 2);
-        effectView.alpha = 0;
-    } completion:^(BOOL finished) {
-        [effectView removeFromSuperview];
+    [self insertSubview:effectView belowSubview:view];
+    if (animate) {
+        effectView.transform = CGAffineTransformMakeScale(0.5, 0.5);
+        [UIView animateWithDuration:0.5f animations:^{
+            effectView.transform = CGAffineTransformMakeScale(2, 2);
+            effectView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [effectView removeFromSuperview];
+        }];
+    } else {
+        [_effectViewArray addObject:effectView];
+        effectView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+        effectView.alpha = 0.7;
+    }
+}
+
+- (void)removeEffectView {
+    [_effectViewArray enumerateObjectsUsingBlock:^(UIView* view, NSUInteger idx, BOOL *stop) {
+        [view removeFromSuperview];
     }];
+    [_effectViewArray removeAllObjects];
 }
 
 // Only override drawRect: if you perform custom drawing.
@@ -149,7 +194,7 @@
     // Drawing code
     if (_selectedCell.count) {
         CGContextRef ref = UIGraphicsGetCurrentContext();
-        CGContextSetLineWidth(ref, 8.0);
+        CGContextSetLineWidth(ref, 5.0);
         CGContextSetStrokeColorWithColor(ref, [UIColor redColor].CGColor);
         CGPoint point[_selectedCell.count+1];
         for (int i = 0; i < _selectedCell.count; i++) {
@@ -170,17 +215,17 @@
     
     NSMutableDictionary* moveDict = [NSMutableDictionary new];
     NSMutableSet* addArray = [NSMutableSet new];
-    for (int posx = 0; posx < 5; posx++) {
+    for (int posx = 0; posx < _cellNum; posx++) {
         int delIdx = 0;
-        for (int posy = 4; posy >= 0; posy--) {
-            int tag = posx+posy*5+1;
+        for (int posy = _cellNum -1; posy >= 0; posy--) {
+            int tag = posx+posy*_cellNum+1;
             GameBoardCell* cell = (GameBoardCell*)[self viewWithTag:tag];
             if ([_selectedCell containsObject:cell]) {
-                int desTag = delIdx*5 + 1 + posx ;
+                int desTag = delIdx*_cellNum + 1 + posx ;
                 [addArray addObject:@(desTag)];
                 delIdx++;
             } else {
-                int desTag = (posy+delIdx)*5 + 1 + posx;
+                int desTag = (posy+delIdx)*_cellNum + 1 + posx;
                 if (desTag != tag) {
                     [moveDict setObject:@(desTag) forKey:@(tag)];
                 }
@@ -198,7 +243,7 @@
     }];
     
     [addArray enumerateObjectsUsingBlock:^(NSNumber* obj, BOOL *stop) {
-        GameBoardCell* cell = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, 50, 50) andNum:(rand()%4+1)];
+        GameBoardCell* cell = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, _cellWidth, _cellWidth) andNum:(rand()%_cellNum+1)];
         [cell setTag:obj.intValue];
         NSValue* value = _posArray[obj.intValue-1];
         CGPoint desPos = [value CGPointValue];
@@ -223,6 +268,23 @@
 
     }];
 }
+
+-(void) playSoundFXnamed:(NSString*)vSFXName
+{
+    NSBundle* bundle = [NSBundle mainBundle];
+    
+    NSString* bundleDirectory = (NSString*)[bundle bundlePath];
+    
+    NSURL *url = [NSURL fileURLWithPath:[bundleDirectory stringByAppendingPathComponent:vSFXName]];
+    AVAudioPlayer* player = [_playerForSound objectForKey:vSFXName];
+    if (!player) {
+        player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+        [_playerForSound setObject:player forKey:vSFXName];
+    }
+    [player prepareToPlay];
+    [player play];
+}
+
 
 
 @end
