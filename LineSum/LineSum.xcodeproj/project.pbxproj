@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		50FBC863191B7A1D00C5B14C /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50FBC862191B7A1D00C5B14C /* GameViewController.m */; };
+		50FBC866191C7EB600C5B14C /* GameBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50FBC865191C7EB600C5B14C /* GameBoardView.m */; };
+		50FBC870191CADAE00C5B14C /* GameBoardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 50FBC86F191CADAE00C5B14C /* GameBoardCell.m */; };
 		9D103E2F18FFE51000BF200A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D103E2E18FFE51000BF200A /* Foundation.framework */; };
 		9D103E3118FFE51000BF200A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D103E3018FFE51000BF200A /* CoreGraphics.framework */; };
 		9D103E3318FFE51000BF200A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D103E3218FFE51000BF200A /* UIKit.framework */; };
@@ -57,6 +59,10 @@
 /* Begin PBXFileReference section */
 		50FBC861191B7A1D00C5B14C /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		50FBC862191B7A1D00C5B14C /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		50FBC864191C7EB600C5B14C /* GameBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBoardView.h; sourceTree = "<group>"; };
+		50FBC865191C7EB600C5B14C /* GameBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoardView.m; sourceTree = "<group>"; };
+		50FBC86E191CADAE00C5B14C /* GameBoardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBoardCell.h; sourceTree = "<group>"; };
+		50FBC86F191CADAE00C5B14C /* GameBoardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoardCell.m; sourceTree = "<group>"; };
 		9D103E2B18FFE51000BF200A /* LineSum.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LineSum.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D103E2E18FFE51000BF200A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9D103E3018FFE51000BF200A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -292,6 +298,10 @@
 				9DA334B31903EE4E00627027 /* CubeContainerView.m */,
 				9D42838A1912165F00BF08C7 /* AdMobView.h */,
 				9D42838B1912165F00BF08C7 /* AdMobView.m */,
+				50FBC864191C7EB600C5B14C /* GameBoardView.h */,
+				50FBC865191C7EB600C5B14C /* GameBoardView.m */,
+				50FBC86E191CADAE00C5B14C /* GameBoardCell.h */,
+				50FBC86F191CADAE00C5B14C /* GameBoardCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -419,6 +429,7 @@
 				9D11E6D2190157AB002D6B2C /* CubeEntity.m in Sources */,
 				50FBC863191B7A1D00C5B14C /* GameViewController.m in Sources */,
 				9D11E6201900F9F3002D6B2C /* CubePath.m in Sources */,
+				50FBC866191C7EB600C5B14C /* GameBoardView.m in Sources */,
 				9D103E3F18FFE51000BF200A /* AppDelegate.m in Sources */,
 				9D42838C1912165F00BF08C7 /* AdMobView.m in Sources */,
 				9D11E61D1900C51A002D6B2C /* ScoreBoardView.m in Sources */,
@@ -426,6 +437,7 @@
 				9DB10ADE191A4D3E00925E11 /* MatrixMath.m in Sources */,
 				9D103E6518FFE53E00BF200A /* Util.m in Sources */,
 				9D103EA518FFEF7F00BF200A /* DeviceInfo.mm in Sources */,
+				50FBC870191CADAE00C5B14C /* GameBoardCell.m in Sources */,
 				9D9F06681902BADB008F5F8C /* TimeBarView.m in Sources */,
 				9D103EA618FFEF7F00BF200A /* UIDevice+screenType.m in Sources */,
 				9DA334B41903EE4E00627027 /* CubeContainerView.m in Sources */,
@@ -558,7 +570,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LineSum/LineSum-Prefix.pch";
 				INFOPLIST_FILE = "LineSum/LineSum-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/lanstonpeng/Downloads/GoogleAdMobAdsSdkiOS-6.5.1",
@@ -585,7 +597,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LineSum/LineSum-Prefix.pch";
 				INFOPLIST_FILE = "LineSum/LineSum-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/lanstonpeng/Downloads/GoogleAdMobAdsSdkiOS-6.5.1",

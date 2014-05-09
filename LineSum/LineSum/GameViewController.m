@@ -7,43 +7,21 @@
 //
 
 #import "GameViewController.h"
+#import "GameBoardView.h"
 
 @interface GameViewController ()
-@property (weak, nonatomic) IBOutlet UIView *gameboardView;
+@property (weak, nonatomic) IBOutlet GameBoardView *gameboardView;
 
 @end
 
 @implementation GameViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self initNumbers];
 }
 
-- (void)initNumbers {
-    for (int i = 0; i < 5; i++) {
-        for(int j = 0; j < 5; j++) {
-            UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-            view.backgroundColor = [UIColor redColor];
-            view.layer.cornerRadius = 25;
-            [view setClipsToBounds:YES];
-            [view setCenter:CGPointMake(40 + j*60, 40+i*60)];
-            [view setTag:(i*5+j+1)];
-            [_gameboardView addSubview:view];
-        }
-    }
-}
 
 - (void)didReceiveMemoryWarning
 {
