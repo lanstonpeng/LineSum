@@ -10,6 +10,7 @@
 #import "GameBoardView.h"
 
 @interface GameViewController ()
+
 @property (weak, nonatomic) IBOutlet GameBoardView *gameboardView;
 
 @end

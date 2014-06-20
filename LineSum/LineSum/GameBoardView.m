@@ -46,6 +46,7 @@
         _posArray = [NSMutableArray new];
         _effectViewArray = [NSMutableArray new];
         _playerForSound = [NSMutableDictionary new];
+        [self setClipsToBounds:YES];
     }
     return self;
 }
@@ -56,7 +57,7 @@
     _cellWidth = (BOARD_WIDTH - 2*EDGE_INSET - (num-1)*cellInset)/num;
     for (int i = 0; i < num; i++) {
         for(int j = 0; j < num; j++) {
-            GameBoardCell* view = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, _cellWidth, _cellWidth) andNum:(rand()%num+1)];
+            GameBoardCell* view = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, _cellWidth, _cellWidth) andNum:[self genRandNumber]];
             view.tag = i*num + j + 1;
             CGPoint center = CGPointMake(EDGE_INSET + _cellWidth/2 + j*(_cellWidth+cellInset), EDGE_INSET + _cellWidth/2 + i*(_cellWidth+cellInset));
             _posArray[i*num + j] = [NSValue valueWithCGPoint:center];
@@ -243,7 +244,7 @@
     }];
     
     [addArray enumerateObjectsUsingBlock:^(NSNumber* obj, BOOL *stop) {
-        GameBoardCell* cell = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, _cellWidth, _cellWidth) andNum:(rand()%_cellNum+1)];
+        GameBoardCell* cell = [[GameBoardCell alloc] initWithFrame:CGRectMake(0, 0, _cellWidth, _cellWidth) andNum:[self genRandNumber]];
         [cell setTag:obj.intValue];
         NSValue* value = _posArray[obj.intValue-1];
         CGPoint desPos = [value CGPointValue];
@@ -285,6 +286,17 @@
     [player play];
 }
 
-
+- (int)genRandNumber {
+    float x = 100/_cellNum + 2.5*(_cellNum - 1);
+    int s = 0;
+    int rd = rand()%100;
+    for (int i = 0; i < _cellNum; i++) {
+        s += (x - 5*i);
+        if (s > rd) {
+            return i+1;
+        }
+    }
+    return 1;
+}
 
 @end

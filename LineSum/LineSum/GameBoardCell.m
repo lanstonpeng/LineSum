@@ -39,23 +39,23 @@
     _number = number;
     switch (number) {
         case 1:{
-            self.backgroundColor =  UIColorFromRGB(0xE0E4CC);
+            self.backgroundColor =  RGBA(0xcc,0x99,0x99,1.0);
             break;
         }
         case 2:{
-            self.backgroundColor =  UIColorFromRGB(0xC8CBB6);
+            self.backgroundColor =  RGBA(130,232,154,1.0);
             break;
         }
         case 3:{
-            self.backgroundColor =  UIColorFromRGB(0xA7DBD8);
+            self.backgroundColor =  RGBA(154,94,175,1.0);
             break;
         }
         case 4:{
-            self.backgroundColor =  UIColorFromRGB(0x95C3C1);
+            self.backgroundColor =  RGBA(239,91,76,1.0);
             break;
         }
         case 5:{
-            self.backgroundColor =  UIColorFromRGB(0x69D2E7);
+            self.backgroundColor =  RGBA(233,217,82,1.0);
             break;
         }
     }
